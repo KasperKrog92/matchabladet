@@ -1,0 +1,82 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import RatingBadge from "@components/RatingBadge.astro";
+import TagList from "@components/TagList.astro";
+
+export async function getStaticPaths() {
+  const reviews = await getCollection("reviews");
+  return reviews.map((review) => ({
+    params: { slug: review.data.slug },
+    props: { review }
+  }));
+}
+
+const { review } = Astro.props;
+const { Content } = await render(review);
+const date = review.data.visitedDate.toLocaleDateString("da-DK", {
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+});
+
+const scores = [
+  ["Matchakvalitet", review.data.matchaQuality],
+  ["Tilberedning", review.data.preparation],
+  ["Tekstur", review.data.texture],
+  ["Atmosfære", review.data.atmosphere]
+];
+---
+
+<BaseLayout title={review.data.title} description={review.data.excerpt} type="article">
+  <article class="mx-auto max-w-4xl px-4 pt-14 sm:px-6 lg:px-8">
+    <a href="/anmeldelser" class="text-sm font-semibold text-matcha-700 hover:text-matcha-900">Tilbage til anmeldelser</a>
+    <div class="mt-8">
+      <p class="text-sm font-semibold uppercase tracking-[0.18em] text-matcha-700">{review.data.city}</p>
+      <h1 class="mt-3 font-serif text-4xl leading-tight text-ink sm:text-5xl">{review.data.title}</h1>
+      <p class="mt-5 text-lg leading-8 text-muted">{review.data.excerpt}</p>
+    </div>
+    {review.data.heroImage && (
+      <img src={review.data.heroImage} alt="" class="mt-8 aspect-[1.6] w-full rounded-md border border-stonewarm-200 object-cover" />
+    )}
+    <div class="mt-8 flex flex-wrap gap-3">
+      <RatingBadge rating={review.data.overallRating} />
+      <TagList tags={review.data.tags} />
+    </div>
+    <dl class="mt-10 grid gap-4 rounded-lg border border-stonewarm-200 bg-white/55 p-5 sm:grid-cols-2">
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Café</dt>
+        <dd class="mt-1 font-medium text-ink">{review.data.cafeName}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Besøgt</dt>
+        <dd class="mt-1 font-medium text-ink">{date}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Drik</dt>
+        <dd class="mt-1 font-medium text-ink">{review.data.drinkType}{review.data.milkType ? ` med ${review.data.milkType}` : ""}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Pris</dt>
+        <dd class="mt-1 font-medium text-ink">{review.data.priceDkk ? `${review.data.priceDkk} kr.` : "Ikke noteret"}</dd>
+      </div>
+      {review.data.address && (
+        <div class="sm:col-span-2">
+          <dt class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Adresse</dt>
+          <dd class="mt-1 font-medium text-ink">{review.data.address}</dd>
+        </div>
+      )}
+    </dl>
+    <div class="mt-8 grid gap-3 sm:grid-cols-4">
+      {scores.map(([label, rating]) => (
+        <div class="rounded-lg border border-stonewarm-200 bg-[#f4ede1]/70 p-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</p>
+          <p class="mt-2 font-serif text-3xl text-matcha-900">{rating}/10</p>
+        </div>
+      ))}
+    </div>
+    <div class="prose-matcha mt-10 max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

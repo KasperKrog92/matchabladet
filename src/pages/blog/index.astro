@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageIntro from "@components/PageIntro.astro";
+import TagList from "@components/TagList.astro";
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Blog" description="Danske blogindlæg om matcha, ritualer, smag og hverdagsro.">
+  <PageIntro
+    eyebrow="Noter"
+    title="Blog"
+    text="Små tekster om matcha som vane, smag og pauserum i en travl hverdag."
+  />
+  <section class="mx-auto grid max-w-6xl gap-5 px-4 pt-10 sm:px-6 md:grid-cols-2 lg:px-8">
+    {posts.map((post) => (
+      <article class="overflow-hidden rounded-md border border-stonewarm-200 bg-white/55">
+        {post.data.heroImage && <img src={post.data.heroImage} alt="" loading="lazy" class="aspect-[1.45] w-full object-cover" />}
+        <div class="p-6">
+          <p class="text-sm font-semibold text-matcha-700">{post.data.pubDate.toLocaleDateString("da-DK")}</p>
+          <h2 class="mt-3 font-serif text-2xl text-ink"><a href={`/blog/${post.data.slug}`}>{post.data.title}</a></h2>
+          <p class="mt-4 leading-7 text-muted">{post.data.excerpt}</p>
+          <div class="mt-5"><TagList tags={post.data.tags} /></div>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TagList from "@components/TagList.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.excerpt} type="article">
+  <article class="mx-auto max-w-3xl px-4 pt-14 sm:px-6 lg:px-8">
+    <a href="/blog" class="text-sm font-semibold text-matcha-700 hover:text-matcha-900">Tilbage til blog</a>
+    <h1 class="mt-8 font-serif text-4xl leading-tight text-ink sm:text-5xl">{post.data.title}</h1>
+    <p class="mt-5 text-lg leading-8 text-muted">{post.data.excerpt}</p>
+    <div class="mt-6"><TagList tags={post.data.tags} /></div>
+    {post.data.heroImage && (
+      <img src={post.data.heroImage} alt="" class="mt-8 aspect-[1.45] w-full rounded-md border border-stonewarm-200 object-cover" />
+    )}
+    <div class="prose-matcha mt-10 max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

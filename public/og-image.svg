@@ -1,0 +1,9 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#FBF7EF"/>
+  <circle cx="934" cy="126" r="168" fill="#DFEACD"/>
+  <circle cx="264" cy="488" r="132" fill="#EEE7DB"/>
+  <path d="M245 319C310 215 417 164 566 166C715 168 821 220 884 321C819 425 711 476 562 474C413 472 309 420 245 319Z" fill="#657F35"/>
+  <path d="M372 321C419 265 481 237 558 238C636 239 699 268 747 324C699 382 636 410 559 409C481 408 418 379 372 321Z" fill="#FBF7EF"/>
+  <text x="600" y="520" text-anchor="middle" font-family="Georgia, serif" font-size="84" fill="#263319">Matchabladet</text>
+  <text x="600" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#6F695F">Danske noter om matcha</text>
+</svg>

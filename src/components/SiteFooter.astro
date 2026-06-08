@@ -1,0 +1,23 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-20 border-t border-stonewarm-200 bg-[#ece8d9]">
+  <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_1fr] lg:px-8">
+    <div>
+      <p class="font-serif text-2xl text-matcha-900">Matchabladet</p>
+      <p class="mt-3 max-w-xl text-sm leading-7 text-muted">
+        Et dansk magasin om matcha, cafékultur og små ritualer med grøn ro i koppen.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-x-5 gap-y-3 text-sm font-medium text-muted md:justify-end">
+      <a class="hover:text-matcha-700" href="/anmeldelser">Anmeldelser</a>
+      <a class="hover:text-matcha-700" href="/guides">Guides</a>
+      <a class="hover:text-matcha-700" href="/blog">Blog</a>
+      <a class="hover:text-matcha-700" href="/om">Om</a>
+    </div>
+  </div>
+  <div class="border-t border-stonewarm-200 px-4 py-4 text-center text-xs text-muted">
+    © {year} Matchabladet. Brygget statisk og stille.
+  </div>
+</footer>

@@ -1,0 +1,146 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ReviewCard from "@components/ReviewCard.astro";
+import TagList from "@components/TagList.astro";
+
+const reviews = (await getCollection("reviews"))
+  .sort((a, b) => b.data.visitedDate.valueOf() - a.data.visitedDate.valueOf());
+
+const latestReviews = reviews.slice(0, 2);
+const rankedReviews = [...reviews].sort((a, b) => b.data.overallRating - a.data.overallRating);
+
+const guides = (await getCollection("guides"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const blogPosts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const featuredGuide = guides.find((guide) => guide.data.featured) ?? guides[0];
+const featuredPost = blogPosts.find((post) => post.data.featured) ?? blogPosts[0];
+const editorialItems = [featuredGuide, featuredPost].filter(Boolean);
+---
+
+<BaseLayout image="/images/hero-matcha.webp">
+  <section class="relative overflow-hidden border-b border-stonewarm-200/70">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-0 lg:px-8">
+      <div class="relative z-10 pb-2 pt-4 md:py-20 lg:py-28">
+        <p class="text-sm font-medium text-matcha-700">Dansk matcha blog</p>
+        <h1 class="mt-5 max-w-xl font-serif text-5xl leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
+          Matcha. Bedre når det er gennemtænkt.
+        </h1>
+        <p class="mt-6 max-w-md text-base leading-8 text-ink/78 sm:text-lg">
+          Jeg besøger caféer i Danmark, drikker matcha og samler ærlige anmeldelser, guides og ranglister, så du kan finde en bedre kop.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+          <a href="/anmeldelser" class="rounded-sm bg-matcha-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-matcha-900">Se anmeldelser</a>
+          <a href="/om" class="text-sm font-semibold text-matcha-700 transition hover:text-matcha-900">Om Matchabladet →</a>
+        </div>
+      </div>
+      <div class="relative -mx-4 md:mx-0 md:min-h-[34rem] lg:min-h-[38rem]">
+        <img
+          src="/images/hero-matcha.webp"
+          alt="Keramisk skål med friskpisket matcha, bambuspisker og bløde morgenskygger"
+          class="h-[28rem] w-full object-cover object-center sm:h-[34rem] md:absolute md:inset-0 md:h-full"
+          fetchpriority="high"
+        />
+        <div class="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 bg-gradient-to-r from-paper to-transparent md:block"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-7xl gap-8 px-4 pt-14 sm:px-6 lg:grid-cols-[1fr_19rem] lg:px-8">
+    <div>
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="font-serif text-3xl text-ink sm:text-4xl">Seneste anmeldelser</h2>
+        <a href="/anmeldelser" class="text-sm font-semibold text-matcha-700 hover:text-matcha-900">Se alle →</a>
+      </div>
+      <div class="mt-6 grid gap-5 md:grid-cols-2">
+        {latestReviews.map((review) => <ReviewCard review={review} />)}
+      </div>
+    </div>
+
+    <aside class="rounded-md border border-stonewarm-200 bg-[#f1ecdf]/80 p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="font-serif text-2xl text-ink">Top 5</h2>
+          <p class="mt-2 text-sm text-muted">Bedste kopper lige nu</p>
+        </div>
+        <svg class="h-7 w-7 text-matcha-700" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M6 26c9.5-2.5 16-9.5 20-20-10.5 3.5-17.3 10.2-20 20Z" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </div>
+      <ol class="mt-6 space-y-4">
+        {rankedReviews.map((review, index) => (
+          <li class="grid grid-cols-[1.75rem_1fr_auto] items-center gap-3 text-sm">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-matcha-700/85 text-xs font-semibold text-white">{index + 1}</span>
+            <a href={`/anmeldelser/${review.data.slug}`} class="font-medium text-ink hover:text-matcha-700">{review.data.cafeName}</a>
+            <span class="tabular-nums text-ink">{review.data.overallRating.toFixed(1)}</span>
+          </li>
+        ))}
+      </ol>
+      <a href="/ranglister" class="mt-7 inline-flex w-full justify-center rounded-sm bg-matcha-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-matcha-900">
+        Se hele ranglisten
+      </a>
+    </aside>
+  </section>
+
+  <section class="mx-auto grid max-w-7xl gap-8 px-4 pt-14 sm:px-6 lg:grid-cols-[1fr_19rem] lg:px-8">
+    <div>
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="font-serif text-3xl text-ink sm:text-4xl">Guides & artikler</h2>
+        <a href="/guides" class="text-sm font-semibold text-matcha-700 hover:text-matcha-900">Se alle →</a>
+      </div>
+      <div class="mt-6 grid gap-5 md:grid-cols-2">
+        {editorialItems.map((item) => {
+          const collection = item.collection === "guides" ? "guides" : "blog";
+          const label = item.collection === "guides" ? "Guide" : "Journal";
+          return (
+            <article class="group relative overflow-hidden rounded-md border border-stonewarm-200 bg-white/62 transition hover:-translate-y-0.5 hover:border-matcha-300">
+              {item.data.heroImage && (
+                <img src={item.data.heroImage} alt="" loading="lazy" class="aspect-[1.4] w-full object-cover" />
+              )}
+              <div class="p-5">
+                <p class="text-sm font-medium text-muted">{label} · {item.data.pubDate.toLocaleDateString("da-DK")}</p>
+                <h3 class="mt-3 font-serif text-2xl leading-snug text-ink">
+                  <a href={`/${collection}/${item.data.slug}`} class="after:absolute after:inset-0">{item.data.title}</a>
+                </h3>
+                <p class="mt-4 leading-7 text-muted">{item.data.excerpt}</p>
+                <div class="mt-5">
+                  <TagList tags={item.data.tags} />
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+
+    <aside class="rounded-md border border-stonewarm-200 bg-white/60 p-6">
+      <h2 class="font-serif text-2xl text-ink">Om Matchabladet</h2>
+      <img src="/images/ritual-matcha.webp" alt="" loading="lazy" class="mt-5 aspect-square rounded-full object-cover" />
+      <p class="mt-5 text-sm leading-7 text-muted">
+        Et lille dansk arkiv for matcha, cafébesøg og hverdagsritualer. Her er fokus på smag, stemning og kopper, der er værd at vende tilbage til.
+      </p>
+      <a href="/om" class="mt-5 inline-flex text-sm font-semibold text-matcha-700 hover:text-matcha-900">Læs mere →</a>
+    </aside>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:px-8">
+    <div class="grid gap-6 rounded-md border border-stonewarm-200 bg-[#e9e6d6]/85 p-6 sm:p-8 md:grid-cols-[1fr_1.1fr] md:items-center">
+      <div class="flex items-start gap-4">
+        <svg class="mt-1 h-8 w-8 shrink-0 text-matcha-700" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M6 26c9.5-2.5 16-9.5 20-20-10.5 3.5-17.3 10.2-20 20Z" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+        <div>
+          <h2 class="font-serif text-2xl text-ink">Få nye anmeldelser og guides i din indbakke</h2>
+          <p class="mt-2 text-sm text-muted">Ingen spam. Kun matcha.</p>
+        </div>
+      </div>
+      <form class="grid gap-3 sm:grid-cols-[1fr_auto]">
+        <label class="sr-only" for="email">Din e-mail</label>
+        <input id="email" name="email" type="email" placeholder="Din e-mail" class="min-h-12 rounded-sm border border-transparent bg-white/85 px-4 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-matcha-500" />
+        <button type="button" class="min-h-12 rounded-sm bg-matcha-700 px-6 text-sm font-semibold text-white transition hover:bg-matcha-900">Tilmeld</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

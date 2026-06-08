@@ -1,0 +1,22 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageIntro from "@components/PageIntro.astro";
+---
+
+<BaseLayout title="Om" description="Læs om Matchabladet, et dansk matcha-univers med anmeldelser, guides og ranglister.">
+  <PageIntro
+    eyebrow="Om siden"
+    title="Et roligt sted for dansk matcha"
+    text="Matchabladet er bygget som et lille, hurtigt arkiv for matchaoplevelser i Danmark: cafébesøg, smagsnoter, ranglister og guides."
+  />
+  <section class="mx-auto max-w-3xl px-4 pt-10 sm:px-6 lg:px-8">
+    <div class="prose-matcha">
+      <p>
+        Her vurderes matcha med blik for både kvalitet og oplevelse. En god kop handler om pulverets friskhed, dosering, vand, tekstur og den stemning, den bliver serveret i.
+      </p>
+      <p>
+        Siden er uden CMS for nu. Alt indhold bor i MDX-filer, så den kan være hurtig, enkel at vedligeholde og klar til statisk deployment.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
