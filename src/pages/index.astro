@@ -6,7 +6,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ReviewCard from "../components/ReviewCard.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import RatingBadge from "../components/RatingBadge.astro";
-import heroImage from "../assets/images/hero-matcha.webp";
+import heroImage from "../assets/images/hero-ice-matcha.png";
 
 const published = <T extends { data: { draft: boolean } }>(items: T[]) =>
   items.filter((item) => !item.data.draft);
@@ -53,33 +53,35 @@ const btnSecondary =
 
 <BaseLayout>
   <!-- Hero -->
-  <section class="border-b border-stone-200">
-    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 md:py-20">
-      <div>
-        <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">Et dansk matcha-magasin</p>
-        <h1 class="mt-4 text-4xl leading-[1.08] sm:text-5xl md:text-6xl">
-          Matcha.<br />Bedre når det<br />er gennemtænkt.
-        </h1>
-        <p class="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
-          Vi besøger caféer i hele Danmark, drikker en masse matcha og giver dig ærlige
-          anmeldelser, rolige guides og ranglister, så du kan finde den bedste matcha.
-        </p>
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/anmeldelser" class={btnPrimary}>Se anmeldelser</a>
-          <a href="/om" class={btnSecondary}>Om Matchabladet →</a>
-        </div>
-      </div>
-      <div class="overflow-hidden rounded-card border border-stone-200">
+  <section class="hero-forside relative isolate overflow-hidden border-b border-stone-200 bg-cream">
+    <div class="relative mx-auto max-w-6xl">
+      <div class="hero-forside__billede absolute inset-y-0 left-0 right-0 -z-10 md:right-8">
         <Image
           src={heroImage}
-          alt="En kop nypisket matcha ved siden af en bambusvisp"
-          width={720}
-          height={560}
-          sizes="(min-width: 768px) 45vw, 90vw"
-          class="aspect-[5/4] w-full object-cover"
+          alt=""
+          width={1536}
+          height={1024}
+          sizes="100vw"
+          class="h-full w-full object-cover object-[66%_center]"
           loading="eager"
           fetchpriority="high"
         />
+      </div>
+      <div class="flex min-h-[40rem] items-center px-5 py-14 sm:px-8 md:min-h-[46rem] md:py-24">
+        <div class="max-w-[20rem] sm:max-w-xl">
+          <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">Et dansk matcha-magasin</p>
+          <h1 class="mt-4 text-[2.45rem] leading-[1.08] sm:text-5xl md:text-6xl">
+            Matcha.<br />Bedre når det<br />er gennemtænkt.
+          </h1>
+          <p class="mt-5 max-w-[19.5rem] text-lg leading-relaxed text-ink-soft sm:max-w-md">
+            Vi besøger caféer i hele Danmark, drikker en masse matcha og giver dig ærlige
+            anmeldelser, rolige guides og ranglister, så du kan finde den bedste matcha.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="/anmeldelser" class={btnPrimary}>Se anmeldelser</a>
+            <a href="/om" class={btnSecondary}>Om Matchabladet →</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -90,8 +92,12 @@ const btnSecondary =
       <div>
         <div class="flex items-baseline justify-between gap-4">
           <h2 class="text-2xl sm:text-3xl">Seneste anmeldelser</h2>
-          <a href="/anmeldelser" class="text-sm text-matcha-700 hover:text-matcha-500">
-            Se alle anmeldelser →
+          <a
+            href="/anmeldelser"
+            class="shrink-0 whitespace-nowrap text-sm text-matcha-700 hover:text-matcha-500"
+          >
+            <span class="sm:hidden">Se alle →</span>
+            <span class="hidden sm:inline">Se alle anmeldelser →</span>
           </a>
         </div>
         <div class="mt-6 grid gap-6 sm:grid-cols-2">
@@ -164,8 +170,12 @@ const btnSecondary =
       <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
         <div class="flex items-baseline justify-between gap-4">
           <h2 class="text-2xl sm:text-3xl">Guides & artikler</h2>
-          <a href="/guides" class="text-sm text-matcha-700 hover:text-matcha-500">
-            Se alle artikler →
+          <a
+            href="/guides"
+            class="shrink-0 whitespace-nowrap text-sm text-matcha-700 hover:text-matcha-500"
+          >
+            <span class="sm:hidden">Se alle →</span>
+            <span class="hidden sm:inline">Se alle artikler →</span>
           </a>
         </div>
         <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -189,3 +199,112 @@ const btnSecondary =
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  /* Gradienterne skal ligge oven på fotoet, ellers dækker fotoet dem. */
+  .hero-forside__billede::before,
+  .hero-forside__billede::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Fotoet holder sig inden for indholdsbredden og flugter med højre kant. */
+  :global(.hero-forside__billede img) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    /* Venstrekanten tones ud mod teksten. Højrekanten opløses i en blødere,
+       aftagende fade, der stopper før glasset, så det står skarpt. */
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 42%,
+      black calc(100% - 7rem),
+      rgb(0 0 0 / 0.55) calc(100% - 3.5rem),
+      rgb(0 0 0 / 0.2) calc(100% - 1.5rem),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 42%,
+      black calc(100% - 7rem),
+      rgb(0 0 0 / 0.55) calc(100% - 3.5rem),
+      rgb(0 0 0 / 0.2) calc(100% - 1.5rem),
+      transparent 100%
+    );
+  }
+
+  .hero-forside__billede::before {
+    background:
+      linear-gradient(
+        90deg,
+        var(--color-cream) 0%,
+        var(--color-cream) 31%,
+        color-mix(in srgb, var(--color-cream) 90%, transparent) 43%,
+        color-mix(in srgb, var(--color-cream) 44%, transparent) 59%,
+        transparent 76%
+      );
+  }
+
+  .hero-forside__billede::after {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-paper) 34%, transparent) 0%,
+        transparent 22%,
+        transparent 78%,
+        color-mix(in srgb, var(--color-cream) 58%, transparent) 100%
+      );
+  }
+
+  @media (max-width: 767px) {
+    :global(.hero-forside__billede img) {
+      left: 0;
+      right: auto;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 74% center;
+      /* På mobil går fotoet til kanten, så kun venstresiden tones ud. */
+      mask-image: linear-gradient(90deg, transparent 0%, black 52%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 52%);
+    }
+
+    /* Kraftigere creme-slør bag teksten. Den lodrette maske slipper sløret
+       i bunden af heroen, så glasset står klart under tekstblokken. */
+    .hero-forside__billede::before {
+      background:
+        linear-gradient(
+          90deg,
+          var(--color-cream) 0%,
+          color-mix(in srgb, var(--color-cream) 96%, transparent) 45%,
+          color-mix(in srgb, var(--color-cream) 86%, transparent) 68%,
+          color-mix(in srgb, var(--color-cream) 64%, transparent) 86%,
+          color-mix(in srgb, var(--color-cream) 44%, transparent) 100%
+        );
+      mask-image: linear-gradient(180deg, black 62%, transparent 90%);
+      -webkit-mask-image: linear-gradient(180deg, black 62%, transparent 90%);
+    }
+
+    .hero-forside__billede::after {
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--color-cream) 72%, transparent) 0%,
+          color-mix(in srgb, var(--color-cream) 26%, transparent) 36%,
+          transparent 72%,
+          color-mix(in srgb, var(--color-cream) 34%, transparent) 100%
+        );
+    }
+  }
+</style>

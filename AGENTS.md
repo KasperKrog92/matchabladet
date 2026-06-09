@@ -19,6 +19,9 @@ Always run `npm run check` after touching content frontmatter, the schemas, or
 When starting the dev server for the user, open it in a visible terminal window
 so the user can stop it directly with `Ctrl+C`.
 
+The dev server defaults to port 4321 but respects a `PORT` environment variable
+when set (used by preview tooling when 4321 is already taken).
+
 ## Commit And Push Workflow
 
 When the user writes "commit and push", treat it as a full finish-and-publish
