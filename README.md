@@ -50,7 +50,8 @@ src/
     guides/          Guides og artikler (.mdx)
     blog/            Blogindlæg (.mdx)
   layouts/           BaseLayout med SEO/Open Graph
-  pages/             Forside + /anmeldelser, /guides, /blog, /ranglister, /om
+  lib/               og-card.ts, genererer delingskort (Open Graph) ved build
+  pages/             Forside + /anmeldelser, /guides, /blog, /ranglister, /om + /og (delingskort)
   styles/            global.css med designtokens (Tailwind @theme)
   config.ts          Sidens navn, navigation og standard-SEO
   content.config.ts  Skemaer for indholdssamlingerne

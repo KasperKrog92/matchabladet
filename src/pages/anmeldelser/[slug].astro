@@ -50,9 +50,9 @@ const facts = [
   { label: "Besøgt", value: formatDanishDate(data.visitedDate) },
 ].filter((fact): fact is { label: string; value: string } => fact !== null);
 
-const ogImage = data.heroImage
-  ? new URL(data.heroImage.src, Astro.site).pathname
-  : undefined;
+// Delingsbilledet er det genererede OG-kort med wordmark og titel,
+// se src/pages/og/[section]/[slug].jpg.ts.
+const ogImage = `/og/anmeldelser/${data.slug}.jpg`;
 
 const heroVideoUrl = data.heroVideo
   ? videoUrls[`/src/assets/images/${data.heroVideo}`]

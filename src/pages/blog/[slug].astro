@@ -20,9 +20,9 @@ const { Content } = await render(post);
 // Læsetid: brug frontmatter hvis sat, ellers beregn ud fra indholdet.
 const readingTime = data.readingTime ?? readingTimeFromMarkdown(post.body ?? "");
 
-const ogImage = data.heroImage
-  ? new URL(data.heroImage.src, Astro.site).pathname
-  : undefined;
+// Delingsbilledet er det genererede OG-kort med wordmark og titel,
+// se src/pages/og/[section]/[slug].jpg.ts.
+const ogImage = `/og/blog/${data.slug}.jpg`;
 ---
 
 <BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>

@@ -60,10 +60,11 @@ to commit the failing state.
 
 ```
 src/
-  pages/            Routes: index, om, 404, anmeldelser/, blog/, guides/, ranglister/
+  pages/            Routes: index, om, 404, anmeldelser/, blog/, guides/, ranglister/, og/ (share cards)
   content/          reviews/ guides/ blog/  (.mdx) + content.config.ts (Zod schemas)
   components/        SiteHeader/Footer, ReviewCard, ArticleCard, RatingBadge, TagList, ReviewMedia, ArticleSummary
   layouts/          BaseLayout.astro (SEO / Open Graph)
+  lib/og-card.ts    Renders the generated OG share cards (satori + resvg + sharp)
   assets/images/    Media optimised by Astro (<Image>); one subfolder per review
   styles/global.css Tailwind @theme design tokens
   config.ts         Site name, nav, default SEO
@@ -125,7 +126,7 @@ optimises images but does **not** transcode video.
 
 ```
 src/assets/images/<slug>/
-  hero.webp          # or e.g. matcha.webp, the still, also used as video poster + OG image
+  hero.webp          # or e.g. matcha.webp, the still, also used as video poster + share card photo
   hero.mp4           # converted, web-ready H.264 (optional)
   originals/         # raw phone .jpg/.mp4 masters, GITIGNORED, kept locally only
 ```
@@ -159,8 +160,8 @@ Typical results: ~32-40 MB HEVC clip -> ~1.4-2.4 MB H.264; ~3.5 MB JPG -> ~60-21
 **How it renders:**
 
 - Reviews schema has `heroImage` (`image()`, also reused as the video poster and
-  the Open Graph image) and optional `heroVideo` (string path relative to
-  `src/assets/images`, e.g. `"faetter-aarhus/matcha.mp4"`).
+  as the photo on the generated share card) and optional `heroVideo` (string path
+  relative to `src/assets/images`, e.g. `"faetter-aarhus/matcha.mp4"`).
 - [src/pages/anmeldelser/\[slug\].astro](src/pages/anmeldelser/[slug].astro)
   resolves the video URL via `import.meta.glob` and passes it to `ReviewMedia`.
 - [src/components/ReviewMedia.astro](src/components/ReviewMedia.astro) adapts to
@@ -184,7 +185,16 @@ Typical results: ~32-40 MB HEVC clip -> ~1.4-2.4 MB H.264; ~3.5 MB JPG -> ~60-21
 4. `npm run check`, then verify on `npm run dev` that the video plays upright and
    isn't cropped.
 
-**OG/share images:** `heroImage` doubles as the Open Graph image. A landscape
-hero makes a good share card; a portrait hero gets cropped by social platforms.
-Prefer a landscape hero (or generate a dedicated 1200x630 image) when the share
-preview matters.
+**OG/share images:** every published article (reviews, guides, blog) gets a
+generated 1200x630 share card at `/og/<sektion>/<slug>.jpg` (sections:
+`anmeldelser`, `guides`, `blog`), rendered at build time by
+[src/pages/og/\[section\]/\[slug\].jpg.ts](src/pages/og/[section]/[slug].jpg.ts)
+with the composition in [src/lib/og-card.ts](src/lib/og-card.ts) (satori +
+resvg + sharp, dev dependencies). The card shows the hero photo cropped to the
+full card behind a dark bottom gradient, the leaf wordmark "matchabladet.dk"
+and the article title; articles without a hero get a calm paper-toned card
+instead. Hero orientation no longer matters for share previews, and the article
+pages point `og:image` at the card route themselves. The card colours mirror
+the design tokens in [src/styles/global.css](src/styles/global.css) and are
+repeated in og-card.ts, so change both together. Non-article pages still use
+`public/images/og-default.webp`.
