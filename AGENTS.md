@@ -189,8 +189,9 @@ Typical results: ~32-40 MB HEVC clip -> ~1.4-2.4 MB H.264; ~3.5 MB JPG -> ~60-21
 generated 1200x630 share card at `/og/<sektion>/<slug>.jpg`, rendered at build
 time by [src/pages/og/\[section\]/\[slug\].jpg.ts](src/pages/og/[section]/[slug].jpg.ts)
 with the composition in [src/lib/og-card.ts](src/lib/og-card.ts): hero photo
-behind a dark bottom gradient, the leaf wordmark "matchabladet.dk" and the
-article title, with a paper-toned fallback when there is no hero. Nothing is
+behind a dark bottom gradient, the logo lockup (leaf, "Matchabladet.dk" and the
+tagline) and the article title, with a paper-toned fallback when there is no
+hero. Nothing is
 done per article, and hero orientation no longer matters for share previews.
 The full workflow, including how to adjust the design, test cards, and refresh
 platform caches after a deploy, lives in

@@ -26,9 +26,10 @@ const HEIGHT = 630;
 const COLOR = {
   paper: "#f6f3ec",
   cream: "#fcfaf5",
+  creamMuted: "rgba(252,250,245,0.78)",
   ink: "#2c2a24",
+  inkMuted: "#847f74",
   matcha50: "#f2f4ea",
-  matcha700: "#4a5730",
 };
 
 // Skemaernes image() giver kun metadata (src, bredde, højde), ikke filens
@@ -50,6 +51,9 @@ const frauncesMedium = await readFile(
 );
 const frauncesSemibold = await readFile(
   path.join(process.cwd(), "node_modules/@fontsource/fraunces/files/fraunces-latin-600-normal.woff"),
+);
+const interMedium = await readFile(
+  path.join(process.cwd(), "node_modules/@fontsource/inter/files/inter-latin-500-normal.woff"),
 );
 
 const leafPng = await readFile(path.join(process.cwd(), "public/images/logo/leaf_logo.png"));
@@ -87,22 +91,42 @@ const el = (
   children?: Node[] | string,
 ): Node => ({ type, props: { ...props, children } });
 
-/** Wordmark-rækken: bladet og "matchabladet.dk" side om side. */
-function wordmark(leafUri: string, textColor: string): Node {
-  return el("div", { style: { display: "flex", alignItems: "center", gap: 16 } }, [
-    el("img", { src: leafUri, width: 38, height: 36 }),
-    el(
-      "div",
-      {
-        style: {
-          fontSize: 31,
-          fontWeight: 500,
-          letterSpacing: -0.3,
-          color: textColor,
+/**
+ * Wordmark-blokken, samme opbygning som sidehovedets logo: bladet til venstre
+ * og to tekstlinjer, navnet i Fraunces og taglinen i spatieret Inter-versal.
+ */
+function wordmark(leafUri: string, nameColor: string, taglineColor: string): Node {
+  return el("div", { style: { display: "flex", alignItems: "center", gap: 18 } }, [
+    el("img", { src: leafUri, width: 52, height: 50 }),
+    el("div", { style: { display: "flex", flexDirection: "column" } }, [
+      el(
+        "div",
+        {
+          style: {
+            fontFamily: "Fraunces",
+            fontSize: 36,
+            fontWeight: 500,
+            letterSpacing: -0.6,
+            color: nameColor,
+          },
         },
-      },
-      "matchabladet.dk",
-    ),
+        "Matchabladet.dk",
+      ),
+      el(
+        "div",
+        {
+          style: {
+            marginTop: 5,
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: 500,
+            letterSpacing: 3,
+            color: taglineColor,
+          },
+        },
+        "ET DANSK MATCHA-MAGASIN",
+      ),
+    ]),
   ]);
 }
 
@@ -165,7 +189,7 @@ async function photoCard(title: string, heroFsPath: string): Promise<Node> {
             flexDirection: "column",
           },
         },
-        [wordmark(leaf, COLOR.cream), titleBlock(title, COLOR.cream)],
+        [wordmark(leaf, COLOR.cream, COLOR.creamMuted), titleBlock(title, COLOR.cream)],
       ),
     ],
   );
@@ -204,7 +228,7 @@ async function plainCard(title: string): Promise<Node> {
             flexDirection: "column",
           },
         },
-        [wordmark(leaf, COLOR.matcha700), titleBlock(title, COLOR.ink)],
+        [wordmark(leaf, COLOR.ink, COLOR.inkMuted), titleBlock(title, COLOR.ink)],
       ),
     ],
   );
@@ -221,6 +245,7 @@ export async function renderOgCard({ title, heroImage }: OgCardInput): Promise<U
     fonts: [
       { name: "Fraunces", data: frauncesMedium, weight: 500, style: "normal" },
       { name: "Fraunces", data: frauncesSemibold, weight: 600, style: "normal" },
+      { name: "Inter", data: interMedium, weight: 500, style: "normal" },
     ],
   });
 

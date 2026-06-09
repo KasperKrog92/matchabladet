@@ -30,7 +30,9 @@ To filer udgør featuren:
 
 Artikelsiderne (`[slug].astro` i anmeldelser, guides og blog) peger selv
 `og:image` på kortruten, og `BaseLayout.astro` skriver meta-taggene. Forsiden
-og de øvrige sider bruger stadig `public/images/og-default.webp`.
+og de øvrige sider bruger stadig `public/images/og-default.jpg`. Det billede
+er lavet manuelt i samme komposition, med forsidens hero og overskrift, og
+genereres ikke ved build.
 
 ## Kortets udseende
 
@@ -40,12 +42,14 @@ Med foto:
   ligegyldig, stående heroes beskæres ikke længere af platformene, fordi kortet
   selv har det rigtige format.
 - Mørk gradient i bunden, så teksten kan læses.
-- Wordmark: bladlogoet (indfarvet creme) og "matchabladet.dk".
+- Wordmark som sidehovedets logo: bladet (indfarvet creme) ved siden af
+  "Matchabladet.dk" i Fraunces med taglinen "ET DANSK MATCHA-MAGASIN" i
+  spatieret Inter-versal under.
 - Titlen i Fraunces, klampet til tre linjer. Titler over 75 tegn sættes en
   anelse mindre.
 
 Uden foto: et roligt kort i papirtonen med et stort, svagt blad som dekoration,
-wordmark i matcha-grøn og titel i blæk.
+samme wordmark i blæk og titel i blæk.
 
 Farverne gentager designtokens fra
 [src/styles/global.css](../src/styles/global.css). satori kan ikke læse
@@ -76,9 +80,9 @@ Alle er devDependencies:
 - `satori`: layout og tekst til SVG.
 - `@resvg/resvg-js`: SVG til PNG.
 - `sharp`: fotobeskæring, indfarvning af logoet og endelig JPEG.
-- `@fontsource/fraunces`: statiske woff-snit (500 og 600). Sitet bruger ellers
-  variable woff2-fonte, men satori kan ikke læse dem, så kortet læser
-  woff-filerne direkte fra node_modules.
+- `@fontsource/fraunces` og `@fontsource/inter`: statiske woff-snit. Sitet
+  bruger ellers variable woff2-fonte, men satori kan ikke læse dem, så kortet
+  læser woff-filerne direkte fra node_modules.
 
 Bladlogoet læses fra `public/images/logo/leaf_logo.png`.
 

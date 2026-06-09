@@ -10,7 +10,7 @@ export const SITE = {
   url: "https://matchabladet.dk",
   locale: "da_DK",
   lang: "da",
-  defaultOgImage: "/images/og-default.webp",
+  defaultOgImage: "/images/og-default.jpg",
   author: "Matchabladet",
 } as const;
 
