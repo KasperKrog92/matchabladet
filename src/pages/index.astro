@@ -7,6 +7,7 @@ import ReviewCard from "../components/ReviewCard.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import RatingBadge from "../components/RatingBadge.astro";
 import heroImage from "../assets/images/hero-ice-matcha.png";
+import { organizationSchema, websiteSchema } from "../lib/seo";
 
 const published = <T extends { data: { draft: boolean } }>(items: T[]) =>
   items.filter((item) => !item.data.draft);
@@ -51,7 +52,7 @@ const btnSecondary =
   "inline-flex items-center justify-center gap-2 rounded-full border border-stone-300 px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-matcha-400 hover:text-matcha-700";
 ---
 
-<BaseLayout>
+<BaseLayout schema={[websiteSchema, organizationSchema]}>
   <!-- Hero -->
   <section class="hero-forside relative isolate overflow-hidden border-b border-stone-200 bg-cream">
     <div class="relative mx-auto max-w-6xl">

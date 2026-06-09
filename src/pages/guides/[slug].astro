@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatDanishDate, readingTimeFromMarkdown } from "../../utils";
+import { absoluteUrl, breadcrumbSchema, isoDate, organizationSchema } from "../../lib/seo";
 
 export const getStaticPaths = (async () => {
   const guides = (await getCollection("guides")).filter((g) => !g.data.draft);
@@ -23,9 +24,39 @@ const readingTime = data.readingTime ?? readingTimeFromMarkdown(guide.body ?? ""
 // Delingsbilledet er det genererede OG-kort med wordmark og titel,
 // se src/pages/og/[section]/[slug].jpg.ts.
 const ogImage = `/og/guides/${data.slug}.jpg`;
+
+// Strukturerede data: guiden som artikel plus brødkrummer.
+const schema = [
+  {
+    "@type": "Article",
+    headline: data.title,
+    description: data.excerpt,
+    inLanguage: "da",
+    url: absoluteUrl(`/guides/${data.slug}/`),
+    mainEntityOfPage: absoluteUrl(`/guides/${data.slug}/`),
+    datePublished: isoDate(data.publishDate),
+    ...(data.updatedDate ? { dateModified: isoDate(data.updatedDate) } : {}),
+    image: absoluteUrl(ogImage),
+    author: organizationSchema,
+    publisher: organizationSchema,
+  },
+  breadcrumbSchema([
+    { name: "Forside", path: "/" },
+    { name: "Guides", path: "/guides/" },
+    { name: data.title },
+  ]),
+];
 ---
 
-<BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>
+<BaseLayout
+  title={data.title}
+  description={data.excerpt}
+  type="article"
+  ogImage={ogImage}
+  publishDate={data.publishDate}
+  updatedDate={data.updatedDate}
+  schema={schema}
+>
   <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8">
     <a href="/guides" class="text-sm text-matcha-700 hover:text-matcha-500">← Alle guides</a>
 
@@ -36,8 +67,15 @@ const ogImage = `/og/guides/${data.slug}.jpg`;
       <h1 class="mt-3 text-3xl sm:text-4xl">{data.title}</h1>
       <p class="mt-4 text-lg leading-relaxed text-ink-soft">{data.excerpt}</p>
       <p class="mt-4 text-sm text-ink-muted">
-        Udgivet {formatDanishDate(data.publishDate)}
-        {data.updatedDate && ` · opdateret ${formatDanishDate(data.updatedDate)}`}
+        Udgivet <time datetime={isoDate(data.publishDate)}>{formatDanishDate(data.publishDate)}</time>
+        {
+          data.updatedDate && (
+            <>
+              {" · opdateret "}
+              <time datetime={isoDate(data.updatedDate)}>{formatDanishDate(data.updatedDate)}</time>
+            </>
+          )
+        }
       </p>
     </header>
 

@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatDanishDate, readingTimeFromMarkdown } from "../../utils";
+import { absoluteUrl, breadcrumbSchema, isoDate, organizationSchema } from "../../lib/seo";
 
 export const getStaticPaths = (async () => {
   const posts = (await getCollection("blog")).filter((p) => !p.data.draft);
@@ -23,9 +24,45 @@ const readingTime = data.readingTime ?? readingTimeFromMarkdown(post.body ?? "")
 // Delingsbilledet er det genererede OG-kort med wordmark og titel,
 // se src/pages/og/[section]/[slug].jpg.ts.
 const ogImage = `/og/blog/${data.slug}.jpg`;
+
+// Strukturerede data: blogindlægget plus brødkrummer. Navngivne skribenter
+// markeres som personer, "Redaktionen" som organisationen bag sitet.
+const author =
+  data.author === "Redaktionen"
+    ? organizationSchema
+    : { "@type": "Person", name: data.author };
+
+const schema = [
+  {
+    "@type": "BlogPosting",
+    headline: data.title,
+    description: data.excerpt,
+    inLanguage: "da",
+    url: absoluteUrl(`/blog/${data.slug}/`),
+    mainEntityOfPage: absoluteUrl(`/blog/${data.slug}/`),
+    datePublished: isoDate(data.publishDate),
+    ...(data.updatedDate ? { dateModified: isoDate(data.updatedDate) } : {}),
+    image: absoluteUrl(ogImage),
+    author,
+    publisher: organizationSchema,
+  },
+  breadcrumbSchema([
+    { name: "Forside", path: "/" },
+    { name: "Blog", path: "/blog/" },
+    { name: data.title },
+  ]),
+];
 ---
 
-<BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>
+<BaseLayout
+  title={data.title}
+  description={data.excerpt}
+  type="article"
+  ogImage={ogImage}
+  publishDate={data.publishDate}
+  updatedDate={data.updatedDate}
+  schema={schema}
+>
   <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8">
     <a href="/blog" class="text-sm text-matcha-700 hover:text-matcha-500">← Alle indlæg</a>
 
@@ -35,7 +72,7 @@ const ogImage = `/og/blog/${data.slug}.jpg`;
       </p>
       <h1 class="mt-3 text-3xl sm:text-4xl">{data.title}</h1>
       <p class="mt-4 text-sm text-ink-muted">
-        Af {data.author} · {formatDanishDate(data.publishDate)}
+        Af {data.author} · <time datetime={isoDate(data.publishDate)}>{formatDanishDate(data.publishDate)}</time>
       </p>
     </header>
 

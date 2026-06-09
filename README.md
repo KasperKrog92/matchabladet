@@ -49,9 +49,9 @@ src/
     reviews/         Caféanmeldelser (.mdx)
     guides/          Guides og artikler (.mdx)
     blog/            Blogindlæg (.mdx)
-  layouts/           BaseLayout med SEO/Open Graph
-  lib/               og-card.ts, genererer delingskort (Open Graph) ved build
-  pages/             Forside + /anmeldelser, /guides, /blog, /ranglister, /om + /og (delingskort)
+  layouts/           BaseLayout med SEO, Open Graph og JSON-LD
+  lib/               og-card.ts (delingskort ved build), seo.ts (schema.org-hjælpere)
+  pages/             Forside + /anmeldelser, /guides, /blog, /ranglister, /om + /og (delingskort) + rss.xml
   styles/            global.css med designtokens (Tailwind @theme)
   config.ts          Sidens navn, navigation og standard-SEO
   content.config.ts  Skemaer for indholdssamlingerne

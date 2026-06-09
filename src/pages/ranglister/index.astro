@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageIntro from "../../components/PageIntro.astro";
 import RatingBadge from "../../components/RatingBadge.astro";
 import type { CollectionEntry } from "astro:content";
+import { absoluteUrl } from "../../lib/seo";
 
 const reviews = (await getCollection("reviews"))
   .filter((review) => !review.data.draft)
@@ -19,11 +20,28 @@ for (const review of reviews) {
 const cities = [...byCity.entries()].sort((a, b) => a[0].localeCompare(b[0], "da"));
 
 const RankingRow = "flex items-center gap-4 py-3";
+
+// Strukturerede data: den samlede rangliste som en ordnet liste af caféer.
+const schema = {
+  "@type": "ItemList",
+  name: "Den bedste matcha i Danmark",
+  description:
+    "Matcha-caféer i Danmark rangeret efter Matchabladets samlede karakter.",
+  itemListOrder: "https://schema.org/ItemListOrderDescending",
+  numberOfItems: reviews.length,
+  itemListElement: reviews.map((review, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: `${review.data.cafeName}, ${review.data.city}`,
+    url: absoluteUrl(`/anmeldelser/${review.data.slug}/`),
+  })),
+};
 ---
 
 <BaseLayout
-  title="Ranglister"
+  title="Den bedste matcha i Danmark"
   description="Matcha-ranglister for hele Danmark og by for by, rangeret efter vores samlede karakter."
+  schema={schema}
 >
   <section class="mx-auto max-w-3xl px-5 py-16 sm:px-8">
     <PageIntro

@@ -23,6 +23,6 @@ export const NAV_LINKS = [
 ] as const;
 
 export const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com" },
+  { label: "Instagram", href: "https://www.instagram.com/matchabladet" },
   { label: "Kontakt", href: "mailto:kkandersen01@gmail.com" },
 ] as const;

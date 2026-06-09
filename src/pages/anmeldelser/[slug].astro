@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import RatingBadge from "../../components/RatingBadge.astro";
 import ReviewMedia from "../../components/ReviewMedia.astro";
 import { formatDanishDate } from "../../utils";
+import { absoluteUrl, breadcrumbSchema, isoDate, organizationSchema } from "../../lib/seo";
 
 // Videoer ligger i src/assets/images men optimeres ikke af Astro; vi slår blot
 // den fingeraftrykte URL op ud fra heroVideo-stien i frontmatter.
@@ -57,9 +58,54 @@ const ogImage = `/og/anmeldelser/${data.slug}.jpg`;
 const heroVideoUrl = data.heroVideo
   ? videoUrls[`/src/assets/images/${data.heroVideo}`]
   : undefined;
+
+// Strukturerede data: anmeldelsen med caféen som det anmeldte sted og
+// karakteren på 1-10-skalaen, plus brødkrummer.
+const schema = [
+  {
+    "@type": "Review",
+    name: data.title,
+    headline: data.title,
+    description: data.excerpt,
+    inLanguage: "da",
+    url: absoluteUrl(`/anmeldelser/${data.slug}/`),
+    datePublished: isoDate(data.visitedDate),
+    image: absoluteUrl(ogImage),
+    author: organizationSchema,
+    publisher: organizationSchema,
+    itemReviewed: {
+      "@type": "CafeOrCoffeeShop",
+      name: data.cafeName,
+      address: {
+        "@type": "PostalAddress",
+        ...(data.address ? { streetAddress: data.address } : {}),
+        addressLocality: data.city,
+        addressCountry: "DK",
+      },
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: data.overallRating,
+      bestRating: 10,
+      worstRating: 1,
+    },
+  },
+  breadcrumbSchema([
+    { name: "Forside", path: "/" },
+    { name: "Anmeldelser", path: "/anmeldelser/" },
+    { name: data.title },
+  ]),
+];
 ---
 
-<BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>
+<BaseLayout
+  title={data.title}
+  description={data.excerpt}
+  type="article"
+  ogImage={ogImage}
+  publishDate={data.visitedDate}
+  schema={schema}
+>
   <article class="mx-auto max-w-4xl px-5 py-12 sm:px-8">
     <a href="/anmeldelser" class="text-sm text-matcha-700 hover:text-matcha-500">← Alle anmeldelser</a>
 
@@ -76,7 +122,9 @@ const heroVideoUrl = data.heroVideo
         <h1 class="mt-3 text-3xl sm:text-4xl">{data.title}</h1>
         <div class="mt-5 flex items-center gap-3">
           <RatingBadge score={data.overallRating} label="Samlet" size="lg" />
-          <span class="text-sm text-ink-muted">Besøgt {formatDanishDate(data.visitedDate)}</span>
+          <span class="text-sm text-ink-muted">
+            Besøgt <time datetime={isoDate(data.visitedDate)}>{formatDanishDate(data.visitedDate)}</time>
+          </span>
         </div>
       </header>
 

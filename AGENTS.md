@@ -60,11 +60,12 @@ to commit the failing state.
 
 ```
 src/
-  pages/            Routes: index, om, 404, anmeldelser/, blog/, guides/, ranglister/, og/ (share cards)
+  pages/            Routes: index, om, 404, anmeldelser/, blog/, guides/, ranglister/, og/ (share cards), rss.xml
   content/          reviews/ guides/ blog/  (.mdx) + content.config.ts (Zod schemas)
   components/        SiteHeader/Footer, ReviewCard, ArticleCard, RatingBadge, TagList, ReviewMedia, ArticleSummary
-  layouts/          BaseLayout.astro (SEO / Open Graph)
+  layouts/          BaseLayout.astro (SEO / Open Graph / JSON-LD)
   lib/og-card.ts    Renders the generated OG share cards (satori + resvg + sharp)
+  lib/seo.ts        Schema.org helpers (Organization, WebSite, breadcrumbs, dates) for JSON-LD
   assets/images/    Media optimised by Astro (<Image>); one subfolder per review
   styles/global.css Tailwind @theme design tokens
   config.ts         Site name, nav, default SEO
@@ -86,6 +87,28 @@ public/             Served as-is: images/ (logo, OG fallback), robots.txt
   `astro:assets` `<Image>` (optimised). Only truly static assets (logo, OG
   fallback) go in `public/`.
 - **One folder per review** under `src/assets/images/<slug>/`. See below.
+
+## SEO
+
+[src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro) writes canonical,
+robots, Open Graph and Twitter meta plus optional JSON-LD. The schema.org
+helpers live in [src/lib/seo.ts](src/lib/seo.ts).
+
+- Article pages pass `type="article"`, `publishDate`/`updatedDate` (written as
+  `article:published_time`/`article:modified_time`) and a `schema` prop:
+  reviews get `Review` (with the café as `CafeOrCoffeeShop` and the 1-10
+  rating), guides get `Article`, blog posts get `BlogPosting`, all with a
+  `BreadcrumbList`. The front page sends `WebSite` + `Organization`, and the
+  ranking page an `ItemList`.
+- All share images are 1200x630; BaseLayout hardcodes `og:image:width/height`.
+- A combined RSS feed is served at `/rss.xml`
+  ([src/pages/rss.xml.ts](src/pages/rss.xml.ts)); reviews are dated by
+  `visitedDate`, guides and blog posts by `publishDate`.
+- The 404 page passes `noindex`. All other pages get
+  `max-image-preview:large`.
+- Dates in article headers are wrapped in `<time datetime>` via `isoDate()`.
+- After schema changes, sanity-check a page in Google's Rich Results Test
+  (https://search.google.com/test/rich-results).
 
 ## Copy And Tone
 
