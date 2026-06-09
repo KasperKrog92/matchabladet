@@ -52,10 +52,10 @@ $grade = "eq=contrast=1.05:brightness=0.012:saturation=0.93:gamma=1.02," +
 
 $isVideo = [IO.Path]::GetExtension($OutputPath).ToLower() -eq ".mp4"
 
-# Skalér ind i en kvadratisk boks (bevarer forholdet, opskalerer ikke store
-# telefonfiler). Stillbilleder: 1920. Klip: 1280.
+# Skalér ind i en kvadratisk boks (bevarer forholdet og opskalerer aldrig;
+# boksen begrænses til kildens egne mål). Stillbilleder: 1920. Klip: 1280.
 $box = if ($isVideo) { 1280 } else { 1920 }
-$scale = "scale=w=${box}:h=${box}:force_original_aspect_ratio=decrease:force_divisible_by=2"
+$scale = "scale=w='min($box,iw)':h='min($box,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2"
 
 $vf = if ($NoGrade) { $scale } else { "$scale,$grade" }
 
