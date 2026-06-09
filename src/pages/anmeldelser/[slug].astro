@@ -4,7 +4,6 @@ import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RatingBadge from "../../components/RatingBadge.astro";
 import ReviewMedia from "../../components/ReviewMedia.astro";
-import TagList from "../../components/TagList.astro";
 import { formatDanishDate } from "../../utils";
 
 // Videoer ligger i src/assets/images men optimeres ikke af Astro; vi slår blot
@@ -83,9 +82,6 @@ const heroVideoUrl = data.heroVideo
     <div class="mt-10 grid gap-8 md:grid-cols-[1fr_15rem] md:items-start">
       <div class="prose-matcha order-last md:order-first">
         <Content />
-        <div class="mt-10">
-          <TagList tags={data.tags} hash />
-        </div>
       </div>
 
       <aside class="space-y-6 md:sticky md:top-24">

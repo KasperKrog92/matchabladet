@@ -27,7 +27,6 @@ const reviews = defineCollection({
       atmosphere: z.number().min(1).max(10),
       veganFriendly: z.boolean(),
       excerpt: z.string(),
-      tags: z.array(z.string()).default([]),
       heroImage: image().optional(),
       // Valgfri, lydløs klip (sti relativt til src/assets/images, fx
       // "cafe-by/hero.mp4"). Afspilles i loop oven på heroImage, der bruges
@@ -51,7 +50,6 @@ const guides = defineCollection({
       updatedDate: z.coerce.date().optional(),
       level: z.enum(["begynder", "øvet", "ekspert"]).default("begynder"),
       readingTime: z.string().optional(),
-      tags: z.array(z.string()).default([]),
       heroImage: image().optional(),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
@@ -72,7 +70,6 @@ const blog = defineCollection({
       updatedDate: z.coerce.date().optional(),
       author: z.string().default("Redaktionen"),
       readingTime: z.string().optional(),
-      tags: z.array(z.string()).default([]),
       heroImage: image().optional(),
       draft: z.boolean().default(false),
     }),
