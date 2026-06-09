@@ -16,6 +16,9 @@ built with Astro.
 Always run `npm run check` after touching content frontmatter, the schemas, or
 `.astro` components. It validates the Zod content schemas and Astro types.
 
+When starting the dev server for the user, open it in a visible terminal window
+so the user can stop it directly with `Ctrl+C`.
+
 ## Commit And Push Workflow
 
 When the user writes "commit and push", treat it as a full finish-and-publish
