@@ -1,20 +1,20 @@
 # Matchabladet
 
 Et dansk matcha-magasin: ærlige caféanmeldelser, rolige guides og ranglister, der hjælper
-dig med at finde den bedste skål matcha i Danmark. Siden er bygget til at føles rolig,
-editorial og japandi-inspireret – hurtig at læse og nem at vedligeholde.
+dig med at finde den bedste matcha i Danmark. Siden er bygget til at føles rolig,
+editorial og japandi-inspireret, hurtig at læse og nem at vedligeholde.
 
 Hele sitet er på **dansk** som standardsprog.
 
 ## Teknologi
 
-- **[Astro](https://astro.build)** – statisk side-generering (`output: "static"`)
-- **TypeScript** – i streng tilstand
-- **Tailwind CSS v4** – via `@tailwindcss/vite`
-- **MDX** – til indhold med komponenter
-- **Astro Content Collections** – typesikkert indhold for `reviews`, `guides` og `blog`
-- **@astrojs/sitemap** – automatisk sitemap
-- **npm** – pakkehåndtering
+- **[Astro](https://astro.build)**: statisk side-generering (`output: "static"`)
+- **TypeScript**: i streng tilstand
+- **Tailwind CSS v4**: via `@tailwindcss/vite`
+- **MDX**: til indhold med komponenter
+- **Astro Content Collections**: typesikkert indhold for `reviews`, `guides` og `blog`
+- **@astrojs/sitemap**: automatisk sitemap
+- **npm**: pakkehåndtering
 
 ## Kom i gang
 
@@ -61,7 +61,7 @@ src/
 
 Alt indhold ligger som Markdown/MDX i `src/content/` (`reviews`, `guides`, `blog`). Et nyt
 indlæg oprettes ved at lægge en `.mdx`-fil i den relevante mappe med den frontmatter, skemaet
-kræver – se [`src/content.config.ts`](src/content.config.ts). Sæt `draft: true` for at holde
+kræver. Se [`src/content.config.ts`](src/content.config.ts). Sæt `draft: true` for at holde
 et indlæg ude af produktionsbygningen.
 
 Konventioner, bidragsguide og medie-workflowet (konvertering af foto/video til anmeldelser)

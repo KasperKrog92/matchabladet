@@ -2,7 +2,7 @@
   "name": "matchabladet",
   "type": "module",
   "version": "1.0.0",
-  "description": "Matchabladet – et dansk matcha-magasin med anmeldelser, guides og ranglister.",
+  "description": "Matchabladet, et dansk matcha-magasin med anmeldelser, guides og ranglister.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

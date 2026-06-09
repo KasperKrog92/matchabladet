@@ -31,7 +31,7 @@ const reviews = defineCollection({
       heroImage: image().optional(),
       // Valgfri, lydløs klip (sti relativt til src/assets/images, fx
       // "cafe-by/hero.mp4"). Afspilles i loop oven på heroImage, der bruges
-      // som plakat. Optimeres ikke af Astro – konvertér selv med ffmpeg.
+      // som plakat. Optimeres ikke af Astro, så konvertér selv med ffmpeg.
       heroVideo: z.string().optional(),
       draft: z.boolean().default(false),
     }),

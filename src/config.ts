@@ -6,7 +6,7 @@ export const SITE = {
   name: "Matchabladet",
   tagline: "Et dansk matcha-magasin",
   description:
-    "Matchabladet er et dansk magasin om matcha – ærlige caféanmeldelser, rolige guides og ranglister, der hjælper dig med at finde den bedste matcha i Danmark.",
+    "Matchabladet er et dansk magasin om matcha med ærlige caféanmeldelser, rolige guides og ranglister, der hjælper dig med at finde den bedste matcha i Danmark.",
   url: "https://matchabladet.dk",
   locale: "da_DK",
   lang: "da",

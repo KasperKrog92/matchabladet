@@ -11,13 +11,13 @@ import heroImage from "../assets/images/hero-matcha.webp";
 const published = <T extends { data: { draft: boolean } }>(items: T[]) =>
   items.filter((item) => !item.data.draft);
 
-// Seneste anmeldelser – nyeste besøg først.
+// Seneste anmeldelser, nyeste besøg først.
 const reviews = published(await getCollection("reviews")).sort(
   (a, b) => b.data.visitedDate.getTime() - a.data.visitedDate.getTime(),
 );
 const latestReviews = reviews.slice(0, 3);
 
-// Topliste – rangeret efter samlet karakter.
+// Topliste, rangeret efter samlet karakter.
 const ranking = [...reviews]
   .sort((a, b) => b.data.overallRating - a.data.overallRating)
   .slice(0, 5);
@@ -62,7 +62,7 @@ const btnSecondary =
         </h1>
         <p class="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
           Vi besøger caféer i hele Danmark, drikker en masse matcha og giver dig ærlige
-          anmeldelser, rolige guides og ranglister – så du kan finde den bedste skål.
+          anmeldelser, rolige guides og ranglister, så du kan finde den bedste matcha.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="/anmeldelser" class={btnPrimary}>Se anmeldelser</a>
@@ -72,7 +72,7 @@ const btnSecondary =
       <div class="overflow-hidden rounded-card border border-stone-200">
         <Image
           src={heroImage}
-          alt="En skål nypisket matcha ved siden af en bambusvisp"
+          alt="En kop nypisket matcha ved siden af en bambusvisp"
           width={720}
           height={560}
           sizes="(min-width: 768px) 45vw, 90vw"
@@ -102,7 +102,7 @@ const btnSecondary =
       <aside class="lg:pt-1">
         <div class="rounded-card border border-stone-200 bg-cream p-5">
           <h2 class="text-lg">Top 5 i Danmark</h2>
-          <p class="mt-1 text-xs text-ink-muted">Vores højest bedømte skåle lige nu</p>
+          <p class="mt-1 text-xs text-ink-muted">Vores højeste karakterer lige nu</p>
           <ol class="mt-4 space-y-3">
             {
               ranking.map((review, index) => (
@@ -182,8 +182,8 @@ const btnSecondary =
     <div class="rounded-card border border-matcha-200 bg-matcha-50 px-6 py-10 text-center sm:px-12 sm:py-14">
       <h2 class="text-2xl sm:text-3xl">Hvor er den bedste matcha i Danmark?</h2>
       <p class="mx-auto mt-3 max-w-xl text-ink-soft">
-        Vi samler alle vores anmeldelser i overskuelige ranglister – by for by og samlet for
-        hele landet. Find din næste skål, før du går hjemmefra.
+        Vi samler alle vores anmeldelser i overskuelige ranglister, by for by og samlet for
+        hele landet. Find din næste matcha, før du går hjemmefra.
       </p>
       <a href="/ranglister" class={`${btnPrimary} mt-6`}>Se ranglisterne</a>
     </div>
