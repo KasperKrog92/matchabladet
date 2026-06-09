@@ -24,6 +24,5 @@ export const NAV_LINKS = [
 
 export const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://instagram.com" },
-  { label: "Pinterest", href: "https://pinterest.com" },
-  { label: "Kontakt", href: "mailto:hej@matchabladet.dk" },
+  { label: "Kontakt", href: "mailto:kkandersen01@gmail.com" },
 ] as const;

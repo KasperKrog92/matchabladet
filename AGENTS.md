@@ -95,7 +95,8 @@ or editing content. The rules below are the short version.
   or noticed in the room.
 - **No AI-speak.** Avoid generic polish like "dyk ned", "opdag", "ultimativ",
   "autentisk", "uundværlig", "problemfri", "skjult perle", "i hjertet af",
-  "en hyldest", "næste niveau", and the stock pattern "ikke bare X, men Y".
+  "en hyldest", "næste niveau", and stock patterns like "ikke bare X, men Y",
+  "ikke som X, bare som Y", and "ikke på samme måde som X, mere som Y".
 - **No em dashes or en dashes in prose.** Use a period, comma, colon, or a
   plain hyphen-minus for numeric ranges (`1-10`, `10-15s`). This applies to
   site copy, content, comments, metadata, README, and this file.

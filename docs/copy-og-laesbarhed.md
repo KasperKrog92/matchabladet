@@ -112,7 +112,8 @@ En guide forklarer noget uden hype og starter med det vigtigste.
 
 - **AI-sprog:** "dyk ned", "opdag", "ultimativ", "autentisk", "uundværlig",
   "problemfri", "skjult perle", "i hjertet af", "en hyldest", "næste niveau" og
-  standardmønsteret "ikke bare X, men Y".
+  standardmønstre som "ikke bare X, men Y", "ikke som X, bare som Y" og
+  "ikke på samme måde som X, mere som Y".
 - **Brede hypeord** uden dækning: "perfekt", "fantastisk", "magisk", "game
   changer". Brug dem kun, hvis sætningen stadig holder som en ærlig note fra
   bordet.
