@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageIntro from "../../components/PageIntro.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+
+const guides = (await getCollection("guides"))
+  .filter((guide) => !guide.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+---
+
+<BaseLayout
+  title="Guides"
+  description="Rolige guides til matcha – fra begynderens første skål til tilberedning, udstyr og smag."
+>
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+    <PageIntro
+      eyebrow="Guides"
+      title="Lær matcha at kende, i dit eget tempo"
+      description="Ingen genveje og ingen mystik – bare klare guides, der hjælper dig fra første skål til en daglig vane, du holder af."
+    />
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        guides.map((guide) => (
+          <ArticleCard entry={guide} basePath="/guides" kicker={`Guide · ${guide.data.level}`} />
+        ))
+      }
+    </div>
+
+    {
+      guides.length === 0 && (
+        <p class="mt-12 text-center text-ink-muted">Der er endnu ingen guides her.</p>
+      )
+    }
+  </section>
+</BaseLayout>

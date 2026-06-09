@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Siden blev ikke fundet" description="Vi kunne ikke finde den side, du leder efter.">
+  <section class="mx-auto flex max-w-2xl flex-col items-center px-5 py-28 text-center sm:px-8">
+    <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">Fejl 404</p>
+    <h1 class="mt-4 text-4xl sm:text-5xl">Skålen er tom her</h1>
+    <p class="mt-4 max-w-md text-lg text-ink-soft">
+      Vi kunne ikke finde den side, du leder efter. Måske er den flyttet – eller også er den
+      aldrig blevet brygget.
+    </p>
+    <a
+      href="/"
+      class="mt-8 inline-flex items-center gap-2 rounded-full bg-matcha-600 px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-matcha-700"
+    >
+      Tilbage til forsiden
+    </a>
+  </section>
+</BaseLayout>

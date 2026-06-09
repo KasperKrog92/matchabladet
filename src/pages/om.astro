@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+import { SITE } from "../config";
+
+const principles = [
+  {
+    title: "Ærlighed frem for hype",
+    body: "Vi skriver, som vi smager. Ingen betalte anmeldelser, ingen pyntede karakterer – kun vores oprigtige indtryk af skålen foran os.",
+  },
+  {
+    title: "Ro frem for støj",
+    body: "Matcha handler om nærvær. Det forsøger vi at lade smitte af på siden: rene sider, langsom læsning og plads til at trække vejret.",
+  },
+  {
+    title: "Det samme for alle",
+    body: "Hver café bedømmes på de samme fem ting – kvalitet, tilberedning, tekstur, stemning og helheden – så karaktererne kan sammenlignes.",
+  },
+];
+---
+
+<BaseLayout
+  title="Om"
+  description="Om Matchabladet – et lille, uafhængigt dansk magasin om matcha, drevet af nysgerrighed og en god skål grøn te."
+>
+  <section class="mx-auto max-w-3xl px-5 py-16 sm:px-8">
+    <PageIntro
+      eyebrow="Om os"
+      title="Om Matchabladet"
+      description="Et lille, uafhængigt magasin om matcha i Danmark."
+    />
+
+    <div class="prose-matcha mx-auto mt-12 max-w-2xl">
+      <p>
+        {SITE.name} startede som en simpel nysgerrighed: Hvorfor smager den ene skål matcha
+        levende og sød, mens den næste er flad og bitter? Jo flere caféer vi besøgte, jo mere
+        gav det mening at skrive det ned – og dele det.
+      </p>
+      <p>
+        I dag er Matchabladet et sted for ærlige caféanmeldelser, rolige guides og ranglister,
+        der gør det nemmere at finde en god matcha, uanset hvor i landet du er. Vi er ikke
+        eksperter med løftet pegefinger, men nysgerrige amatører, der tager smagen alvorligt.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-3">
+      {
+        principles.map((principle) => (
+          <div class="rounded-card border border-stone-200 bg-cream p-5">
+            <h2 class="text-lg">{principle.title}</h2>
+            <p class="mt-2 text-sm leading-relaxed text-ink-soft">{principle.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-14 rounded-card border border-matcha-200 bg-matcha-50 p-8 text-center">
+      <h2 class="text-2xl">Har du et tip til en café?</h2>
+      <p class="mx-auto mt-3 max-w-md text-ink-soft">
+        Kender du et sted, der laver matcha med omtanke? Vi hører meget gerne fra dig.
+      </p>
+      <a
+        href="mailto:hej@matchabladet.dk"
+        class="mt-6 inline-flex items-center gap-2 rounded-full bg-matcha-600 px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-matcha-700"
+      >
+        Skriv til os
+      </a>
+    </div>
+  </section>
+</BaseLayout>

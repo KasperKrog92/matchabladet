@@ -1,0 +1,75 @@
+---
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE } from "../config";
+
+interface Props {
+  /** Sidens titel – vises i browserfanen og som og:title. */
+  title?: string;
+  /** Metabeskrivelse til SEO og deling. */
+  description?: string;
+  /** Absolut eller rod-relativ sti til delingsbillede (Open Graph). */
+  ogImage?: string;
+  /** Indholdstype til Open Graph ("website" eller "article"). */
+  type?: "website" | "article";
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogImage = SITE.defaultOgImage,
+  type = "website",
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/images/logo/leaf_logo.png" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? SITE.name} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#indhold"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-matcha-600 focus:px-4 focus:py-2 focus:text-cream"
+    >
+      Spring til indhold
+    </a>
+    <SiteHeader />
+    <main id="indhold" class="flex-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  /** Karakter på skalaen 1-10. */
+  score: number;
+  /** Valgfri etiket, fx "Samlet". */
+  label?: string;
+  /** Størrelse: "sm" til kort, "lg" til detaljesider. */
+  size?: "sm" | "lg";
+}
+
+const { score, label, size = "sm" } = Astro.props;
+
+// Farvetone følger karakteren – jo højere, jo mørkere matcha-grøn.
+const tone =
+  score >= 8.5
+    ? "bg-matcha-600 text-cream"
+    : score >= 7
+      ? "bg-matcha-200 text-matcha-800"
+      : score >= 5
+        ? "bg-stone-200 text-ink"
+        : "bg-stone-300 text-ink";
+
+const sizing =
+  size === "lg" ? "text-base px-3 py-1.5 gap-1.5" : "text-xs px-2.5 py-1 gap-1";
+
+const formatted = Number.isInteger(score) ? score.toFixed(1) : String(score);
+---
+
+<span
+  class:list={["inline-flex items-center rounded-full font-medium tabular-nums", tone, sizing]}
+  title={label ? `${label}: ${formatted} ud af 10` : `${formatted} ud af 10`}
+>
+  {label && <span class="font-normal opacity-80">{label}</span>}
+  <span>{formatted}</span>
+  <span class="opacity-60">/10</span>
+</span>

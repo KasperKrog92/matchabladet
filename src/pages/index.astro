@@ -1,0 +1,191 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ReviewCard from "../components/ReviewCard.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import RatingBadge from "../components/RatingBadge.astro";
+import heroImage from "../assets/images/hero-matcha.webp";
+
+const published = <T extends { data: { draft: boolean } }>(items: T[]) =>
+  items.filter((item) => !item.data.draft);
+
+// Seneste anmeldelser – nyeste besøg først.
+const reviews = published(await getCollection("reviews")).sort(
+  (a, b) => b.data.visitedDate.getTime() - a.data.visitedDate.getTime(),
+);
+const latestReviews = reviews.slice(0, 3);
+
+// Topliste – rangeret efter samlet karakter.
+const ranking = [...reviews]
+  .sort((a, b) => b.data.overallRating - a.data.overallRating)
+  .slice(0, 5);
+
+// Fremhævet guide (falder tilbage til den nyeste, hvis ingen er markeret).
+const guides = published(await getCollection("guides")).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+const featuredGuide = guides.find((g) => g.data.featured) ?? guides[0];
+
+// Blandet række af guides og blogindlæg.
+const blogPosts = published(await getCollection("blog")).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+type ArticleRowItem = {
+  entry: CollectionEntry<"guides"> | CollectionEntry<"blog">;
+  basePath: string;
+  kicker: string;
+};
+const articleRow: ArticleRowItem[] = [
+  ...guides
+    .filter((g) => g.data.slug !== featuredGuide?.data.slug)
+    .slice(0, 2)
+    .map((g) => ({ entry: g, basePath: "/guides", kicker: `Guide · ${g.data.level}` })),
+  ...blogPosts.slice(0, 1).map((b) => ({ entry: b, basePath: "/blog", kicker: "Blog" })),
+];
+
+const btnPrimary =
+  "inline-flex items-center justify-center gap-2 rounded-full bg-matcha-600 px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-matcha-700";
+const btnSecondary =
+  "inline-flex items-center justify-center gap-2 rounded-full border border-stone-300 px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-matcha-400 hover:text-matcha-700";
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="border-b border-stone-200">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 md:py-20">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">Et dansk matcha-magasin</p>
+        <h1 class="mt-4 text-4xl leading-[1.08] sm:text-5xl md:text-6xl">
+          Matcha.<br />Bedre når det<br />er gennemtænkt.
+        </h1>
+        <p class="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
+          Vi besøger caféer i hele Danmark, drikker en masse matcha og giver dig ærlige
+          anmeldelser, rolige guides og ranglister – så du kan finde den bedste skål.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/anmeldelser" class={btnPrimary}>Se anmeldelser</a>
+          <a href="/om" class={btnSecondary}>Om Matchabladet →</a>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-card border border-stone-200">
+        <Image
+          src={heroImage}
+          alt="En skål nypisket matcha ved siden af en bambusvisp"
+          width={720}
+          height={560}
+          sizes="(min-width: 768px) 45vw, 90vw"
+          class="aspect-[5/4] w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Seneste anmeldelser + topliste -->
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+    <div class="grid gap-12 lg:grid-cols-[1fr_20rem]">
+      <div>
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="text-2xl sm:text-3xl">Seneste anmeldelser</h2>
+          <a href="/anmeldelser" class="text-sm text-matcha-700 hover:text-matcha-500">
+            Se alle anmeldelser →
+          </a>
+        </div>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2">
+          {latestReviews.map((review) => <ReviewCard review={review} />)}
+        </div>
+      </div>
+
+      <aside class="lg:pt-1">
+        <div class="rounded-card border border-stone-200 bg-cream p-5">
+          <h2 class="text-lg">Top 5 i Danmark</h2>
+          <p class="mt-1 text-xs text-ink-muted">Vores højest bedømte skåle lige nu</p>
+          <ol class="mt-4 space-y-3">
+            {
+              ranking.map((review, index) => (
+                <li class="flex items-center gap-3">
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-matcha-100 text-xs font-medium text-matcha-800">
+                    {index + 1}
+                  </span>
+                  <a
+                    href={`/anmeldelser/${review.data.slug}`}
+                    class="flex-1 truncate text-sm text-ink-soft hover:text-matcha-700"
+                  >
+                    {review.data.cafeName}
+                    <span class="text-ink-muted"> · {review.data.city}</span>
+                  </a>
+                  <RatingBadge score={review.data.overallRating} />
+                </li>
+              ))
+            }
+          </ol>
+          <a href="/ranglister" class={`${btnPrimary} mt-5 w-full`}>Se hele ranglisten</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Fremhævet guide -->
+  {
+    featuredGuide && (
+      <section class="border-y border-stone-200 bg-paper-soft">
+        <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 sm:px-8 md:grid-cols-2">
+          {featuredGuide.data.heroImage && (
+            <div class="order-last overflow-hidden rounded-card border border-stone-200 md:order-first">
+              <Image
+                src={featuredGuide.data.heroImage}
+                alt={featuredGuide.data.title}
+                width={640}
+                height={460}
+                sizes="(min-width: 768px) 45vw, 90vw"
+                class="aspect-[4/3] w-full object-cover"
+              />
+            </div>
+          )}
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">Fremhævet guide</p>
+            <h2 class="mt-3 text-3xl">{featuredGuide.data.title}</h2>
+            <p class="mt-4 text-lg leading-relaxed text-ink-soft">{featuredGuide.data.excerpt}</p>
+            <a href={`/guides/${featuredGuide.data.slug}`} class={`${btnSecondary} mt-6`}>
+              Læs guiden →
+            </a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Guides & artikler -->
+  {
+    articleRow.length > 0 && (
+      <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="text-2xl sm:text-3xl">Guides & artikler</h2>
+          <a href="/guides" class="text-sm text-matcha-700 hover:text-matcha-500">
+            Se alle artikler →
+          </a>
+        </div>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {articleRow.map(({ entry, basePath, kicker }) => (
+            <ArticleCard entry={entry} basePath={basePath} kicker={kicker} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- CTA til ranglister -->
+  <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
+    <div class="rounded-card border border-matcha-200 bg-matcha-50 px-6 py-10 text-center sm:px-12 sm:py-14">
+      <h2 class="text-2xl sm:text-3xl">Hvor er den bedste matcha i Danmark?</h2>
+      <p class="mx-auto mt-3 max-w-xl text-ink-soft">
+        Vi samler alle vores anmeldelser i overskuelige ranglister – by for by og samlet for
+        hele landet. Find din næste skål, før du går hjemmefra.
+      </p>
+      <a href="/ranglister" class={`${btnPrimary} mt-6`}>Se ranglisterne</a>
+    </div>
+  </section>
+</BaseLayout>

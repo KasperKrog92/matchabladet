@@ -1,0 +1,95 @@
+---
+import { NAV_LINKS, SITE } from "../config";
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+---
+
+<header class="sticky top-0 z-40 border-b border-stone-200/80 bg-paper/85 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
+    <a href="/" class="group flex items-center gap-2.5" aria-label={`${SITE.name} – forside`}>
+      <img
+        src="/images/logo/leaf_logo.png"
+        alt=""
+        width="32"
+        height="32"
+        class="h-8 w-8 opacity-90 transition-opacity group-hover:opacity-100"
+      />
+      <span class="flex flex-col leading-none">
+        <span class="font-serif text-xl tracking-tight text-ink">{SITE.name}</span>
+        <span class="mt-0.5 text-[0.68rem] uppercase tracking-[0.18em] text-ink-muted">
+          {SITE.tagline}
+        </span>
+      </span>
+    </a>
+
+    <!-- Desktop-navigation -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Hovednavigation">
+      {
+        NAV_LINKS.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? "page" : undefined}
+            class:list={[
+              "rounded-full px-3.5 py-2 text-sm transition-colors",
+              isActive(link.href)
+                ? "bg-matcha-100 text-matcha-800"
+                : "text-ink-soft hover:bg-stone-100 hover:text-ink",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Mobil-knap -->
+    <button
+      type="button"
+      id="menu-toggle"
+      class="inline-flex items-center justify-center rounded-md p-2 text-ink-soft hover:bg-stone-100 md:hidden"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+    >
+      <span class="sr-only">Åbn menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobil-navigation -->
+  <nav
+    id="mobile-nav"
+    class="hidden border-t border-stone-200/80 px-5 pb-4 pt-2 md:hidden"
+    aria-label="Mobilnavigation"
+  >
+    {
+      NAV_LINKS.map((link) => (
+        <a
+          href={link.href}
+          aria-current={isActive(link.href) ? "page" : undefined}
+          class:list={[
+            "block rounded-lg px-3 py-2.5 text-base transition-colors",
+            isActive(link.href)
+              ? "bg-matcha-100 text-matcha-800"
+              : "text-ink-soft hover:bg-stone-100",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const nav = document.getElementById("mobile-nav");
+
+  toggle?.addEventListener("click", () => {
+    const open = nav?.classList.toggle("hidden") === false;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+</script>

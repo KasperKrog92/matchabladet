@@ -1,0 +1,27 @@
+---
+interface Props {
+  /** Lille overlinje, fx "Anmeldelser". */
+  eyebrow?: string;
+  title: string;
+  /** Kort beskrivende undertekst. */
+  description?: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<div class="mx-auto max-w-2xl text-center">
+  {
+    eyebrow && (
+      <p class="text-xs uppercase tracking-[0.2em] text-matcha-600">{eyebrow}</p>
+    )
+  }
+  <h1 class="mt-3 text-4xl sm:text-5xl">{title}</h1>
+  {
+    description && (
+      <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-ink-soft">
+        {description}
+      </p>
+    )
+  }
+</div>

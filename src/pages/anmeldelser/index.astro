@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageIntro from "../../components/PageIntro.astro";
+import ReviewCard from "../../components/ReviewCard.astro";
+
+const reviews = (await getCollection("reviews"))
+  .filter((review) => !review.data.draft)
+  .sort((a, b) => b.data.visitedDate.getTime() - a.data.visitedDate.getTime());
+---
+
+<BaseLayout
+  title="Anmeldelser"
+  description="Ærlige anmeldelser af matcha-caféer i hele Danmark – med karakterer for kvalitet, tilberedning, tekstur og stemning."
+>
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+    <PageIntro
+      eyebrow="Anmeldelser"
+      title="Caféanmeldelser fra hele Danmark"
+      description="Vi besøger caféerne, drikker matchaen og giver vores ærlige vurdering. Hver anmeldelse bygger på fem delkarakterer, så du ved præcis, hvad du går efter."
+    />
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {reviews.map((review) => <ReviewCard review={review} />)}
+    </div>
+
+    {
+      reviews.length === 0 && (
+        <p class="mt-12 text-center text-ink-muted">Der er endnu ingen anmeldelser her.</p>
+      )
+    }
+  </section>
+</BaseLayout>

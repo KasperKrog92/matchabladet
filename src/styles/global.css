@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/*
+  Designtokens for Matchabladet.
+  Rolig, editorial og japandi-inspireret: varm off-white baggrund,
+  dæmpet matcha-grøn accent og bløde sten/beige-neutraler.
+*/
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces Variable", Georgia, "Times New Roman", serif;
+
+  /* Papir / baggrunde */
+  --color-paper: #f6f3ec;
+  --color-paper-soft: #efe9df;
+  --color-cream: #fcfaf5;
+
+  /* Blæk / tekst */
+  --color-ink: #2c2a24;
+  --color-ink-soft: #54514a;
+  --color-ink-muted: #847f74;
+
+  /* Sten / beige-neutraler */
+  --color-stone-100: #f1ede4;
+  --color-stone-200: #e6e0d4;
+  --color-stone-300: #d8d1c2;
+  --color-stone-400: #b9b1a0;
+
+  /* Matcha-grøn accent */
+  --color-matcha-50: #f2f4ea;
+  --color-matcha-100: #e3e8d2;
+  --color-matcha-200: #c7d0a8;
+  --color-matcha-300: #a7b67e;
+  --color-matcha-400: #899a5c;
+  --color-matcha-500: #6f8147;
+  --color-matcha-600: #5c6c3a;
+  --color-matcha-700: #4a5730;
+  --color-matcha-800: #3b4527;
+
+  --radius-card: 0.875rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-matcha-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-matcha-200);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* Læsevenlig typografi til MDX-indhold (artikler, guides, anmeldelser). */
+  .prose-matcha {
+    color: var(--color-ink-soft);
+    font-size: 1.075rem;
+    line-height: 1.75;
+  }
+  .prose-matcha > * + * {
+    margin-top: 1.15em;
+  }
+  .prose-matcha h2 {
+    margin-top: 2.4rem;
+    margin-bottom: 0.4rem;
+    font-size: 1.6rem;
+    color: var(--color-ink);
+  }
+  .prose-matcha h3 {
+    margin-top: 1.8rem;
+    margin-bottom: 0.2rem;
+    font-size: 1.25rem;
+    color: var(--color-ink);
+  }
+  .prose-matcha p {
+    margin-top: 0;
+  }
+  .prose-matcha a {
+    color: var(--color-matcha-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .prose-matcha a:hover {
+    color: var(--color-matcha-500);
+  }
+  .prose-matcha ul,
+  .prose-matcha ol {
+    padding-left: 1.3rem;
+  }
+  .prose-matcha ul {
+    list-style: disc;
+  }
+  .prose-matcha ol {
+    list-style: decimal;
+  }
+  .prose-matcha li + li {
+    margin-top: 0.4rem;
+  }
+  .prose-matcha strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .prose-matcha blockquote {
+    border-left: 3px solid var(--color-matcha-300);
+    padding-left: 1.1rem;
+    font-style: italic;
+    color: var(--color-ink-soft);
+  }
+  .prose-matcha img {
+    border-radius: var(--radius-card);
+  }
+  .prose-matcha hr {
+    border: none;
+    border-top: 1px solid var(--color-stone-200);
+    margin: 2.2rem 0;
+  }
+}

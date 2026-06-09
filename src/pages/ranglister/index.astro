@@ -1,0 +1,97 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageIntro from "../../components/PageIntro.astro";
+import RatingBadge from "../../components/RatingBadge.astro";
+import type { CollectionEntry } from "astro:content";
+
+const reviews = (await getCollection("reviews"))
+  .filter((review) => !review.data.draft)
+  .sort((a, b) => b.data.overallRating - a.data.overallRating);
+
+// Gruppér efter by, så hver by får sin egen rangliste.
+const byCity = new Map<string, CollectionEntry<"reviews">[]>();
+for (const review of reviews) {
+  const list = byCity.get(review.data.city) ?? [];
+  list.push(review);
+  byCity.set(review.data.city, list);
+}
+const cities = [...byCity.entries()].sort((a, b) => a[0].localeCompare(b[0], "da"));
+
+const RankingRow = "flex items-center gap-4 py-3";
+---
+
+<BaseLayout
+  title="Ranglister"
+  description="Matcha-ranglister for hele Danmark og by for by – rangeret efter vores samlede karakter."
+>
+  <section class="mx-auto max-w-3xl px-5 py-16 sm:px-8">
+    <PageIntro
+      eyebrow="Ranglister"
+      title="Den bedste matcha i Danmark"
+      description="Alle vores anmeldelser samlet og rangeret efter den samlede karakter. Vi opdaterer listerne, hver gang vi har besøgt et nyt sted."
+    />
+
+    <!-- Samlet rangliste -->
+    <div class="mt-12">
+      <h2 class="text-2xl">Hele Danmark</h2>
+      <ol class="mt-4 divide-y divide-stone-200 rounded-card border border-stone-200 bg-cream px-5">
+        {
+          reviews.map((review, index) => (
+            <li class={RankingRow}>
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-matcha-100 text-sm font-medium text-matcha-800">
+                {index + 1}
+              </span>
+              <div class="min-w-0 flex-1">
+                <a
+                  href={`/anmeldelser/${review.data.slug}`}
+                  class="block truncate font-medium text-ink hover:text-matcha-700"
+                >
+                  {review.data.cafeName}
+                </a>
+                <span class="text-sm text-ink-muted">{review.data.city} · {review.data.drinkType}</span>
+              </div>
+              <RatingBadge score={review.data.overallRating} size="lg" />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <!-- Ranglister per by -->
+    {
+      cities.length > 1 && (
+        <div class="mt-14 space-y-10">
+          <h2 class="text-2xl">By for by</h2>
+          {cities.map(([city, list]) => (
+            <div>
+              <h3 class="text-lg text-ink-soft">{city}</h3>
+              <ol class="mt-3 divide-y divide-stone-200 rounded-card border border-stone-200 bg-cream px-5">
+                {list.map((review, index) => (
+                  <li class={RankingRow}>
+                    <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stone-100 text-xs font-medium text-ink-soft">
+                      {index + 1}
+                    </span>
+                    <a
+                      href={`/anmeldelser/${review.data.slug}`}
+                      class="min-w-0 flex-1 truncate text-ink hover:text-matcha-700"
+                    >
+                      {review.data.cafeName}
+                    </a>
+                    <RatingBadge score={review.data.overallRating} />
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      reviews.length === 0 && (
+        <p class="mt-12 text-center text-ink-muted">Der er endnu ingen anmeldelser at rangere.</p>
+      )
+    }
+  </section>
+</BaseLayout>

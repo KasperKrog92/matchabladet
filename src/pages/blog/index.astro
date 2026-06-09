@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageIntro from "../../components/PageIntro.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+---
+
+<BaseLayout
+  title="Blog"
+  description="Tanker, vaner og små historier om matcha og det rolige liv omkring den grønne skål."
+>
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+    <PageIntro
+      eyebrow="Blog"
+      title="Notater fra en grøn hverdag"
+      description="Mindre om karakterer, mere om ritualer, refleksioner og glæden ved en god kop matcha."
+    />
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => <ArticleCard entry={post} basePath="/blog" kicker="Blog" />)}
+    </div>
+
+    {
+      posts.length === 0 && (
+        <p class="mt-12 text-center text-ink-muted">Der er endnu ingen indlæg her.</p>
+      )
+    }
+  </section>
+</BaseLayout>

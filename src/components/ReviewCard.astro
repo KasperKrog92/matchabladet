@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import RatingBadge from "./RatingBadge.astro";
+
+interface Props {
+  review: CollectionEntry<"reviews">;
+  /** Sæt til false for at skjule billedet i kompakte lister. */
+  showImage?: boolean;
+}
+
+const { review, showImage = true } = Astro.props;
+const { data } = review;
+const href = `/anmeldelser/${data.slug}`;
+---
+
+<article class="group flex flex-col overflow-hidden rounded-card border border-stone-200 bg-cream transition-colors hover:border-matcha-300">
+  {
+    showImage && data.heroImage && (
+      <a href={href} class="block overflow-hidden" tabindex="-1" aria-hidden="true">
+        <Image
+          src={data.heroImage}
+          alt={`Matcha hos ${data.cafeName}`}
+          width={640}
+          height={420}
+          widths={[320, 480, 640]}
+          sizes="(min-width: 768px) 30vw, 90vw"
+          class="aspect-[3/2] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      </a>
+    )
+  }
+
+  <div class="flex flex-1 flex-col p-5">
+    <p class="text-xs uppercase tracking-[0.14em] text-ink-muted">
+      {data.cafeName} · {data.city}
+    </p>
+    <h3 class="mt-2 text-lg leading-snug">
+      <a href={href} class="transition-colors hover:text-matcha-700">
+        {data.title}
+      </a>
+    </h3>
+    <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-soft">
+      {data.excerpt}
+    </p>
+
+    <div class="mt-4 flex items-center justify-between gap-3 border-t border-stone-200 pt-3">
+      <RatingBadge score={data.overallRating} />
+      <span class="text-xs text-ink-muted">
+        {data.drinkType}
+        {data.veganFriendly && " · vegansk"}
+      </span>
+    </div>
+  </div>
+</article>
