@@ -33,14 +33,20 @@ const subRatings = [
   { label: "Stemning", value: data.atmosphere },
 ];
 
+const plantMilkLabels = {
+  standard: "Som standard",
+  "skal-bestilles": "Skal bestilles",
+  "ikke-tilbudt": "Ikke tilbudt",
+};
+
 const facts = [
   { label: "Café", value: data.cafeName },
   { label: "By", value: data.city },
   data.address ? { label: "Adresse", value: data.address } : null,
   { label: "Drik", value: data.drinkType },
   data.milkType ? { label: "Mælk", value: data.milkType } : null,
+  { label: "Plantemælk", value: plantMilkLabels[data.plantMilkService] },
   data.priceDkk ? { label: "Pris", value: `${data.priceDkk} kr.` } : null,
-  { label: "Vegansk", value: data.veganFriendly ? "Ja" : "Nej" },
   { label: "Besøgt", value: formatDanishDate(data.visitedDate) },
 ].filter((fact): fact is { label: string; value: string } => fact !== null);
 

@@ -12,6 +12,12 @@ interface Props {
 const { review, showImage = true } = Astro.props;
 const { data } = review;
 const href = `/anmeldelser/${data.slug}`;
+
+const plantMilkLabels = {
+  standard: "plantemælk som standard",
+  "skal-bestilles": "plantemælk skal bestilles",
+  "ikke-tilbudt": "ingen plantemælk",
+};
 ---
 
 <article class="group flex flex-col overflow-hidden rounded-card border border-stone-200 bg-cream transition-colors hover:border-matcha-300">
@@ -48,7 +54,7 @@ const href = `/anmeldelser/${data.slug}`;
       <RatingBadge score={data.overallRating} />
       <span class="text-xs text-ink-muted">
         {data.drinkType}
-        {data.veganFriendly && " · vegansk"}
+        {` · ${plantMilkLabels[data.plantMilkService]}`}
       </span>
     </div>
   </div>

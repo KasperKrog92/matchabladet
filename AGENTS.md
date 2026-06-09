@@ -75,6 +75,9 @@ public/             Served as-is: images/ (logo, OG fallback), robots.txt
 - **Content** is MDX in `src/content/<collection>/`. Schemas and field docs are
   in [src/content.config.ts](src/content.config.ts). Review ratings are on a
   **1-10** scale. Set `draft: true` to keep a post out of the build.
+- **Review milk fields:** use `milkType` for the milk actually tasted, and
+  `plantMilkService` to say whether plant milk is served as `"standard"`, must
+  be requested (`"skal-bestilles"`), or is not offered (`"ikke-tilbudt"`).
 - **Images:** content images go in `src/assets/images/` and render through
   `astro:assets` `<Image>` (optimised). Only truly static assets (logo, OG
   fallback) go in `public/`.
