@@ -29,6 +29,10 @@ const reviews = defineCollection({
       excerpt: z.string(),
       tags: z.array(z.string()).default([]),
       heroImage: image().optional(),
+      // Valgfri, lydløs klip (sti relativt til src/assets/images, fx
+      // "cafe-by/hero.mp4"). Afspilles i loop oven på heroImage, der bruges
+      // som plakat. Optimeres ikke af Astro – konvertér selv med ffmpeg.
+      heroVideo: z.string().optional(),
       draft: z.boolean().default(false),
     }),
 });

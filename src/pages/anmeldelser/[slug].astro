@@ -1,11 +1,19 @@
 ---
 import { getCollection, render } from "astro:content";
-import { Image } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RatingBadge from "../../components/RatingBadge.astro";
+import ReviewMedia from "../../components/ReviewMedia.astro";
 import TagList from "../../components/TagList.astro";
 import { formatDanishDate } from "../../utils";
+
+// Videoer ligger i src/assets/images men optimeres ikke af Astro; vi slår blot
+// den fingeraftrykte URL op ud fra heroVideo-stien i frontmatter.
+const videoUrls = import.meta.glob<string>("/src/assets/images/**/*.mp4", {
+  query: "?url",
+  import: "default",
+  eager: true,
+});
 
 export const getStaticPaths = (async () => {
   const reviews = (await getCollection("reviews")).filter((r) => !r.data.draft);
@@ -40,6 +48,10 @@ const facts = [
 const ogImage = data.heroImage
   ? new URL(data.heroImage.src, Astro.site).pathname
   : undefined;
+
+const heroVideoUrl = data.heroVideo
+  ? videoUrls[`/src/assets/images/${data.heroVideo}`]
+  : undefined;
 ---
 
 <BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>
@@ -58,14 +70,12 @@ const ogImage = data.heroImage
     </header>
 
     {
-      data.heroImage && (
-        <Image
-          src={data.heroImage}
+      (data.heroImage || heroVideoUrl) && (
+        <ReviewMedia
+          image={data.heroImage}
+          videoSrc={heroVideoUrl}
           alt={`Matcha hos ${data.cafeName}`}
-          width={960}
-          height={600}
-          sizes="(min-width: 768px) 768px, 90vw"
-          class="mt-8 aspect-[8/5] w-full rounded-card border border-stone-200 object-cover"
+          class="mt-8"
         />
       )
     }

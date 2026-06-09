@@ -1,0 +1,203 @@
+---
+import { Image, getImage } from "astro:assets";
+
+/**
+ * Viser hero-/inline-medie til en anmeldelse og tilpasser sig orienteringen:
+ *
+ * - Landskab: bredt banner i fast 8:5-forhold (beskåret med object-cover).
+ * - Portræt:  naturligt forhold, centreret og højdebegrænset (ingen beskæring).
+ *
+ * Er `videoSrc` sat, vises stillbilledet (`image`) som plakat med en lille
+ * afspilningsknap. Et tryk starter videoen; et tryk mens den kører stopper den
+ * og vender tilbage til stillbilledet. Orienteringen bestemmes ud fra `image`.
+ */
+interface Props {
+  image?: ImageMetadata;
+  videoSrc?: string;
+  alt: string;
+  class?: string;
+}
+
+const { image, videoSrc, alt, class: className = "" } = Astro.props;
+
+// Uden billede kan vi ikke kende forholdet på forhånd; antag portræt, da det
+// er normen for telefonklip.
+const isPortrait = image ? image.height > image.width : true;
+
+const poster = image
+  ? await getImage({ src: image, width: 800, format: "webp" })
+  : undefined;
+
+const frame = isPortrait
+  ? "mx-auto block h-auto max-h-[70svh] w-auto max-w-full rounded-card border border-stone-200 bg-cream object-contain"
+  : "block aspect-[8/5] w-full rounded-card border border-stone-200 bg-cream object-cover";
+
+// Figuren krymper om portrætvideoen (så knappen flugter med den), men fylder
+// hele bredden ved landskab.
+const figureClass = isPortrait
+  ? `review-media relative mx-auto w-fit ${className}`
+  : `review-media relative w-full ${className}`;
+---
+
+{
+  videoSrc ? (
+    <figure class={figureClass} data-review-media>
+      <video
+        class={frame}
+        poster={poster?.src}
+        width={image?.width}
+        height={image?.height}
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label={alt}
+        data-review-video
+      >
+        <source src={videoSrc} type="video/mp4" />
+      </video>
+      <button
+        type="button"
+        class="review-media__btn"
+        aria-label="Afspil video"
+        data-review-toggle
+      >
+        <span class="review-media__chip review-media__chip--play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+        </span>
+        <span class="review-media__chip review-media__chip--stop" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+        </span>
+      </button>
+    </figure>
+  ) : image ? (
+    isPortrait ? (
+      <Image
+        src={image}
+        alt={alt}
+        widths={[360, 540, 720]}
+        sizes="(min-width: 768px) 540px, 80vw"
+        class={`${frame} ${className}`}
+      />
+    ) : (
+      <Image
+        src={image}
+        alt={alt}
+        width={960}
+        height={600}
+        widths={[480, 768, 960]}
+        sizes="(min-width: 768px) 768px, 90vw"
+        class={`${frame} ${className}`}
+      />
+    )
+  ) : null
+}
+
+<style>
+  .review-media__btn {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    display: grid;
+    place-items: center;
+    height: 4rem;
+    width: 4rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: inset 0.2s ease;
+  }
+
+  .review-media__chip {
+    display: none;
+    place-items: center;
+    height: 3.25rem;
+    width: 3.25rem;
+    border-radius: 9999px;
+    background: rgb(253 251 246 / 0.85);
+    color: var(--color-matcha-700, #3f5f43);
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(2px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+  .review-media__chip svg {
+    height: 1.5rem;
+    width: 1.5rem;
+    /* lille optisk forskydning så afspilningstrekanten ser centreret ud */
+    margin-left: 0.1rem;
+  }
+  .review-media__chip--stop svg {
+    margin-left: 0;
+  }
+
+  /* Standard (stoppet): vis afspil-chippen centreret */
+  .review-media__chip--play {
+    display: grid;
+  }
+  .review-media__btn:hover .review-media__chip--play {
+    transform: scale(1.06);
+    background: rgb(253 251 246 / 0.97);
+  }
+
+  /* Afspiller: knappen dækker hele mediet, så et tryk hvor som helst stopper.
+     Stop-chippen toner frem ved hover/fokus (og er svagt synlig på touch). */
+  .review-media[data-playing="true"] .review-media__btn {
+    inset: 0;
+    height: auto;
+    width: auto;
+    margin: 0;
+  }
+  .review-media[data-playing="true"] .review-media__chip--play {
+    display: none;
+  }
+  .review-media[data-playing="true"] .review-media__chip--stop {
+    display: grid;
+    opacity: 0;
+  }
+  .review-media[data-playing="true"] .review-media__btn:hover .review-media__chip--stop,
+  .review-media[data-playing="true"] .review-media__btn:focus-visible .review-media__chip--stop {
+    opacity: 1;
+  }
+  @media (hover: none) {
+    .review-media[data-playing="true"] .review-media__chip--stop {
+      opacity: 0.9;
+    }
+  }
+
+  .review-media__btn:focus-visible {
+    outline: 2px solid var(--color-matcha-500, #6b8f6f);
+    outline-offset: 3px;
+    border-radius: 9999px;
+  }
+</style>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>("[data-review-media]")) {
+    const video = fig.querySelector<HTMLVideoElement>("video[data-review-video]");
+    const btn = fig.querySelector<HTMLButtonElement>("[data-review-toggle]");
+    if (!video || !btn) continue;
+
+    const setPlaying = (playing: boolean) => {
+      fig.dataset.playing = playing ? "true" : "false";
+      btn.setAttribute("aria-label", playing ? "Stop video" : "Afspil video");
+      btn.setAttribute("aria-pressed", String(playing));
+    };
+
+    btn.addEventListener("click", () => {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+        video.load(); // nulstil og vis plakaten (stillbilledet) igen
+        setPlaying(false);
+      }
+    });
+
+    video.addEventListener("play", () => setPlaying(true));
+    video.addEventListener("pause", () => setPlaying(false));
+  }
+</script>

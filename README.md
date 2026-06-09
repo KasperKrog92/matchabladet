@@ -43,7 +43,7 @@ public/
   images/            Statiske billeder (logo, OG-fallback)
   robots.txt
 src/
-  assets/images/     Billeder der optimeres af Astro (<Image>)
+  assets/images/     Billeder der optimeres af Astro (<Image>); én undermappe pr. anmeldelse
   components/        SiteHeader, SiteFooter, ReviewCard, RatingBadge, TagList, PageIntro, ArticleCard
   content/
     reviews/         Caféanmeldelser (.mdx)
@@ -59,34 +59,13 @@ src/
 
 ## Indhold
 
-Alt indhold ligger som Markdown/MDX i `src/content/`. Et nyt indlæg oprettes ved at lægge en
-`.mdx`-fil i den relevante mappe med den frontmatter, skemaet kræver (se `src/content.config.ts`).
+Alt indhold ligger som Markdown/MDX i `src/content/` (`reviews`, `guides`, `blog`). Et nyt
+indlæg oprettes ved at lægge en `.mdx`-fil i den relevante mappe med den frontmatter, skemaet
+kræver – se [`src/content.config.ts`](src/content.config.ts). Sæt `draft: true` for at holde
+et indlæg ude af produktionsbygningen.
 
-Eksempel på en anmeldelse:
-
-```mdx
----
-title: "Overskrift på anmeldelsen"
-slug: "cafe-by"
-city: "Aarhus"
-cafeName: "Caféens navn"
-visitedDate: 2026-05-18
-drinkType: "Ceremoniel matcha"
-overallRating: 8.7
-matchaQuality: 9
-preparation: 9
-texture: 8
-atmosphere: 9
-veganFriendly: true
-excerpt: "Kort opsummering, der vises på kort og i deling."
-tags: ["ceremoniel", "aarhus"]
-heroImage: "../../assets/images/review-cafe-by.webp"
----
-
-Brødtekst skrevet i Markdown/MDX.
-```
-
-Sæt `draft: true` i frontmatter for at holde et indlæg ude af produktionsbygningen.
+Konventioner, bidragsguide og medie-workflowet (konvertering af foto/video til anmeldelser)
+er beskrevet i **[AGENTS.md](AGENTS.md)**.
 
 ## Deployment
 
