@@ -59,7 +59,7 @@ to commit the failing state.
 src/
   pages/            Routes: index, om, 404, anmeldelser/, blog/, guides/, ranglister/
   content/          reviews/ guides/ blog/  (.mdx) + content.config.ts (Zod schemas)
-  components/        SiteHeader/Footer, ReviewCard, ArticleCard, RatingBadge, TagList, ReviewMedia
+  components/        SiteHeader/Footer, ReviewCard, ArticleCard, RatingBadge, TagList, ReviewMedia, ArticleSummary
   layouts/          BaseLayout.astro (SEO / Open Graph)
   assets/images/    Media optimised by Astro (<Image>); one subfolder per review
   styles/global.css Tailwind @theme design tokens
@@ -84,6 +84,11 @@ public/             Served as-is: images/ (logo, OG fallback), robots.txt
 - **One folder per review** under `src/assets/images/<slug>/`. See below.
 
 ## Copy And Tone
+
+The full editorial reference, with examples of good and bad Matchabladet copy and
+the article structure for reviews and guides, lives in
+**[docs/copy-og-laesbarhed.md](docs/copy-og-laesbarhed.md)**. Read it when writing
+or editing content. The rules below are the short version.
 
 - **Write Danish like a real visit, not a campaign.** Calm, specific, observant
   and lightly personal. Prefer what was tasted, seen, heard, paid, waited for,

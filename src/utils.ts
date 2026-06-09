@@ -28,7 +28,21 @@ export function averageScore(values: number[]): number {
 
 /** Estimerer læsetid i hele minutter ud fra et tekstindhold. */
 export function readingTimeFromText(text: string): string {
-  const words = text.trim().split(/\s+/).length;
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.round(words / 200));
   return `${minutes} min læsning`;
+}
+
+/**
+ * Estimerer læsetid ud fra et rå Markdown/MDX-indhold. Fjerner MDX-imports,
+ * JSX-tags og almindelige Markdown-tegn, så ordtællingen rammer selve teksten.
+ * Bruges som fallback, når readingTime ikke er sat i frontmatter.
+ */
+export function readingTimeFromMarkdown(body: string): string {
+  const text = body
+    .replace(/^\s*(import|export)\s.+$/gm, "") // MDX import/export-linjer
+    .replace(/<[^>]+>/g, " ") // JSX- og HTML-tags
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links: behold kun linkteksten
+    .replace(/[#>*_`~|]/g, " "); // resterende Markdown-tegn
+  return readingTimeFromText(text);
 }

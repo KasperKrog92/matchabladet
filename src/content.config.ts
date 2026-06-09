@@ -49,6 +49,7 @@ const guides = defineCollection({
       publishDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       level: z.enum(["begynder", "øvet", "ekspert"]).default("begynder"),
+      // Valgfri. Udelades den, beregnes læsetiden automatisk ud fra indholdet.
       readingTime: z.string().optional(),
       heroImage: image().optional(),
       featured: z.boolean().default(false),
@@ -69,6 +70,7 @@ const blog = defineCollection({
       publishDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       author: z.string().default("Redaktionen"),
+      // Valgfri. Udelades den, beregnes læsetiden automatisk ud fra indholdet.
       readingTime: z.string().optional(),
       heroImage: image().optional(),
       draft: z.boolean().default(false),

@@ -44,7 +44,7 @@ public/
   robots.txt
 src/
   assets/images/     Billeder der optimeres af Astro (<Image>); én undermappe pr. anmeldelse
-  components/        SiteHeader, SiteFooter, ReviewCard, RatingBadge, TagList, PageIntro, ArticleCard
+  components/        SiteHeader, SiteFooter, ReviewCard, RatingBadge, TagList, PageIntro, ArticleCard, ArticleSummary
   content/
     reviews/         Caféanmeldelser (.mdx)
     guides/          Guides og artikler (.mdx)
@@ -65,7 +65,8 @@ kræver. Se [`src/content.config.ts`](src/content.config.ts). Sæt `draft: true`
 et indlæg ude af produktionsbygningen.
 
 Konventioner, bidragsguide og medie-workflowet (konvertering af foto/video til anmeldelser)
-er beskrevet i **[AGENTS.md](AGENTS.md)**.
+er beskrevet i **[AGENTS.md](AGENTS.md)**. Den redaktionelle reference for tone, læsbarhed og
+artikelstruktur ligger i **[docs/copy-og-laesbarhed.md](docs/copy-og-laesbarhed.md)**.
 
 ## Deployment
 

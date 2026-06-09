@@ -62,7 +62,6 @@
     font-family: var(--font-serif);
     font-weight: 400;
     line-height: 1.12;
-    letter-spacing: -0.01em;
     color: var(--color-ink);
   }
 
@@ -83,8 +82,10 @@
 }
 
 @layer components {
-  /* Læsevenlig typografi til MDX-indhold (artikler, guides, anmeldelser). */
+  /* Læsevenlig typografi til MDX-indhold (artikler, guides, anmeldelser).
+     Linjelængden holdes på en rolig læsebredde; layoutet placerer kolonnen. */
   .prose-matcha {
+    max-width: 68ch;
     color: var(--color-ink-soft);
     font-size: 1.075rem;
     line-height: 1.75;
@@ -118,6 +119,8 @@
   }
   .prose-matcha ul,
   .prose-matcha ol {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
     padding-left: 1.3rem;
   }
   .prose-matcha ul {
@@ -134,10 +137,14 @@
     font-weight: 600;
   }
   .prose-matcha blockquote {
+    margin-top: 1.9em;
+    margin-bottom: 1.9em;
     border-left: 3px solid var(--color-matcha-300);
-    padding-left: 1.1rem;
+    padding-left: 1.3rem;
+    font-size: 1.2rem;
     font-style: italic;
-    color: var(--color-ink-soft);
+    line-height: 1.6;
+    color: var(--color-ink);
   }
   .prose-matcha img {
     border-radius: var(--radius-card);
@@ -146,5 +153,42 @@
     border: none;
     border-top: 1px solid var(--color-stone-200);
     margin: 2.2rem 0;
+  }
+  .prose-matcha table {
+    width: 100%;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
+    border-collapse: collapse;
+    font-size: 0.97rem;
+    line-height: 1.55;
+  }
+  .prose-matcha th,
+  .prose-matcha td {
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--color-stone-200);
+    text-align: left;
+    vertical-align: top;
+  }
+  .prose-matcha thead th {
+    border-bottom: 1px solid var(--color-stone-300);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-matcha tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .prose-matcha tbody th {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* "Kort fortalt"-panel i guides (ArticleSummary). Holder en strammere
+     listerytme end den omgivende brødtekst. */
+  .prose-matcha .article-summary ul {
+    margin-top: 0.6em;
+    margin-bottom: 0;
+  }
+  .prose-matcha .article-summary li + li {
+    margin-top: 0.3rem;
   }
 }

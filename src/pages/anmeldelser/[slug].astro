@@ -60,33 +60,42 @@ const heroVideoUrl = data.heroVideo
 ---
 
 <BaseLayout title={data.title} description={data.excerpt} type="article" ogImage={ogImage}>
-  <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8">
+  <article class="mx-auto max-w-4xl px-5 py-12 sm:px-8">
     <a href="/anmeldelser" class="text-sm text-matcha-700 hover:text-matcha-500">← Alle anmeldelser</a>
 
-    <header class="mt-6">
-      <p class="text-xs uppercase tracking-[0.16em] text-ink-muted">
-        {data.cafeName} · {data.city}
+    {/*
+      Desktop: tekst i venstre kolonne med rolig læsebredde, karakterer og fakta
+      i en smal sticky kolonne til højre. Mobil følger rækkefølgen titel, rating,
+      hero, nøglefakta, tekst (asiden ligger mellem hero og brødtekst i DOM).
+    */}
+    <div class="mt-6 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-x-10">
+      <header class="lg:col-start-1">
+        <p class="text-xs uppercase tracking-[0.16em] text-ink-muted">
+          {data.cafeName} · {data.city}
+        </p>
+        <h1 class="mt-3 text-3xl sm:text-4xl">{data.title}</h1>
+        <div class="mt-5 flex items-center gap-3">
+          <RatingBadge score={data.overallRating} label="Samlet" size="lg" />
+          <span class="text-sm text-ink-muted">Besøgt {formatDanishDate(data.visitedDate)}</span>
+        </div>
+      </header>
+
+      <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink-soft lg:col-start-1">
+        {data.excerpt}
       </p>
-      <h1 class="mt-3 text-3xl sm:text-4xl">{data.title}</h1>
-      <div class="mt-5 flex items-center gap-3">
-        <RatingBadge score={data.overallRating} label="Samlet" size="lg" />
-        <span class="text-sm text-ink-muted">Besøgt {formatDanishDate(data.visitedDate)}</span>
-      </div>
-    </header>
 
-    {
-      (data.heroImage || heroVideoUrl) && (
-        <ReviewMedia
-          image={data.heroImage}
-          videoSrc={heroVideoUrl}
-          alt={`Matcha hos ${data.cafeName}`}
-          class="mt-8"
-        />
-      )
-    }
+      {
+        (data.heroImage || heroVideoUrl) && (
+          <ReviewMedia
+            image={data.heroImage}
+            videoSrc={heroVideoUrl}
+            alt={`Matcha hos ${data.cafeName}`}
+            class="mt-8 lg:col-start-1"
+          />
+        )
+      }
 
-    <div class="mt-10 flow-root">
-      <aside class="mb-8 space-y-6 md:float-right md:mb-6 md:ml-8 md:w-60">
+      <aside class="mt-8 space-y-6 lg:col-start-2 lg:[grid-row:1/span_99] lg:mt-0 lg:self-start lg:sticky lg:top-24">
         <div class="rounded-card border border-stone-200 bg-cream p-5">
           <h2 class="text-sm uppercase tracking-[0.14em] text-ink-muted">Karakterer</h2>
           <ul class="mt-3 space-y-2.5">
@@ -116,7 +125,7 @@ const heroVideoUrl = data.heroVideo
         </div>
       </aside>
 
-      <div class="prose-matcha">
+      <div class="prose-matcha mt-10 lg:col-start-1">
         <Content />
       </div>
     </div>

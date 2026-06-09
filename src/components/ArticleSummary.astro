@@ -1,0 +1,46 @@
+---
+/**
+ * Kort opsummering til guides ("kort fortalt"): et roligt panel lige efter
+ * hero, så en travl læser hurtigt kan scanne hovedpointerne. Bruges i MDX med
+ * en markdown-liste i slottet:
+ *
+ *   <ArticleSummary>
+ *
+ *   - Første pointe
+ *   - Anden pointe
+ *
+ *   </ArticleSummary>
+ *
+ * Listestilen strammes en anelse via .article-summary i global.css.
+ */
+interface Props {
+  /** Overlinje øverst i panelet. */
+  title?: string;
+}
+
+const { title = "Kort fortalt" } = Astro.props;
+---
+
+<aside class="article-summary">
+  <p class="article-summary__label">{title}</p>
+  <slot />
+</aside>
+
+<style>
+  .article-summary {
+    margin-top: 2rem;
+    margin-bottom: 2.4rem;
+    border: 1px solid var(--color-stone-200);
+    border-left: 3px solid var(--color-matcha-300);
+    border-radius: var(--radius-card);
+    background: var(--color-cream);
+    padding: 1.25rem 1.5rem;
+  }
+  .article-summary__label {
+    margin: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-muted);
+  }
+</style>
