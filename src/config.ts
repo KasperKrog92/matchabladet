@@ -14,6 +14,11 @@ export const SITE = {
   author: "Matchabladet",
 } as const;
 
+export const CREATOR = {
+  name: "Kasper Krog",
+  url: "https://kasper-krog.dk/",
+} as const;
+
 export const NAV_LINKS = [
   { label: "Anmeldelser", href: "/anmeldelser" },
   { label: "Guides", href: "/guides" },

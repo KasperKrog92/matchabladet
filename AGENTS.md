@@ -68,7 +68,7 @@ src/
   lib/seo.ts        Schema.org helpers (Organization, WebSite, breadcrumbs, dates) for JSON-LD
   assets/images/    Media optimised by Astro (<Image>); one subfolder per review
   styles/global.css Tailwind @theme design tokens
-  config.ts         Site name, nav, default SEO
+  config.ts         Site name, creator credit, nav, default SEO
   utils.ts          Helpers (Danish date formatting, etc.)
 public/             Served as-is: images/ (logo, OG fallback), robots.txt
 ```
@@ -87,6 +87,9 @@ public/             Served as-is: images/ (logo, OG fallback), robots.txt
   `astro:assets` `<Image>` (optimised). Only truly static assets (logo, OG
   fallback) go in `public/`.
 - **One folder per review** under `src/assets/images/<slug>/`. See below.
+- **Creator credit:** The sitewide footer links the complete phrase "Lavet med
+  omtanke af Kasper Krog" to `https://kasper-krog.dk/` with `rel="author"`.
+  Keep it text-only, readable, and visually secondary to the magazine.
 
 ## SEO
 

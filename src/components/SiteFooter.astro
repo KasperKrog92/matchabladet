@@ -1,5 +1,5 @@
 ---
-import { NAV_LINKS, SITE, SOCIAL_LINKS } from "../config";
+import { CREATOR, NAV_LINKS, SITE, SOCIAL_LINKS } from "../config";
 
 const year = new Date().getFullYear();
 ---
@@ -51,7 +51,13 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="mt-6 flex flex-col gap-2 border-t border-stone-200 pt-4 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
-      <p>© {year} {SITE.name}. Lavet med omtanke i Danmark.</p>
+      <p>
+        © {year} {SITE.name} · <a
+          class="underline decoration-stone-200 underline-offset-2 transition-colors hover:text-matcha-700"
+          href={CREATOR.url}
+          rel="author"
+        >Lavet med omtanke af {CREATOR.name}</a>
+      </p>
       <p>Skrevet med kærlighed til en god kop matcha.</p>
     </div>
   </div>
